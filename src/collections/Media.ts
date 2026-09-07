@@ -1,5 +1,7 @@
 import type { CollectionConfig } from 'payload'
 
+import { anyone, authenticated } from '../access'
+
 /**
  * Uploaded media (farm photos, egg/tray imagery, blog covers, etc.).
  * `alt` is required for accessibility and SEO, per Doc 04.
@@ -9,7 +11,10 @@ import type { CollectionConfig } from 'payload'
 export const Media: CollectionConfig = {
   slug: 'media',
   access: {
-    read: () => true,
+    read: anyone,
+    create: authenticated,
+    update: authenticated,
+    delete: authenticated,
   },
   fields: [
     {
@@ -22,5 +27,14 @@ export const Media: CollectionConfig = {
       type: 'text',
     },
   ],
-  upload: true,
+  upload: {
+    // Generated sizes used across the site (Doc 04 §4 Media).
+    imageSizes: [
+      { name: 'thumbnail', width: 400, height: 300, position: 'centre' },
+      { name: 'card', width: 768, height: 576, position: 'centre' },
+      { name: 'hero', width: 1920, height: 1080, position: 'centre' },
+    ],
+    focalPoint: true,
+    mimeTypes: ['image/*'],
+  },
 }

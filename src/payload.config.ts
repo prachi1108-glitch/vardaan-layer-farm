@@ -8,6 +8,14 @@ import sharp from 'sharp'
 
 import { Users } from './collections/Users'
 import { Media } from './collections/Media'
+import { Products } from './collections/Products'
+import { Categories } from './collections/Categories'
+import { Posts } from './collections/Posts'
+import { Enquiries } from './collections/Enquiries'
+import { Testimonials } from './collections/Testimonials'
+import { SiteSettings } from './globals/SiteSettings'
+import { HomePage } from './globals/HomePage'
+import { Navigation } from './globals/Navigation'
 import { createReliableStream } from './lib/db-stream'
 
 const filename = fileURLToPath(import.meta.url)
@@ -28,7 +36,16 @@ export default buildConfig({
       baseDir: path.resolve(dirname),
     },
   },
-  collections: [Users, Media],
+  collections: [
+    Users,
+    Media,
+    Products,
+    Categories,
+    Posts,
+    Enquiries,
+    Testimonials,
+  ],
+  globals: [SiteSettings, HomePage, Navigation],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',
   typescript: {
