@@ -1,6 +1,7 @@
 import type { CollectionConfig } from 'payload'
 
 import { anyone, authenticated } from '../access'
+import { notifyNewEnquiry } from '../lib/notify'
 
 /**
  * Wholesale enquiry submissions — the leads (Doc 04 §4).
@@ -112,14 +113,9 @@ export const Enquiries: CollectionConfig = {
     afterChange: [
       ({ doc, operation }) => {
         if (operation === 'create') {
-          // TODO (Phase 3): send email/WhatsApp notification to Vardaan.
-          console.info('[enquiry] new lead:', {
-            id: doc.id,
-            businessName: doc.businessName,
-            businessType: doc.businessType,
-            city: doc.city,
-            phone: doc.phone,
-          })
+          // Fire-and-forget: notify Vardaan (email if configured, else logs).
+          // Never awaited — a slow/failed notification must not block the save.
+          void notifyNewEnquiry(doc)
         }
         return doc
       },

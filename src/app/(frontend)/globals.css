@@ -108,6 +108,54 @@ h1, h2, h3, h4 {
   }
 }
 
+/* Rich-text article styling for blog posts (lexical output) */
+.prose-vardaan {
+  color: var(--color-ink);
+  line-height: 1.75;
+  font-size: 1.05rem;
+}
+.prose-vardaan h2 {
+  font-family: var(--font-display);
+  font-size: 1.65rem;
+  margin: 2.2rem 0 0.75rem;
+  color: var(--color-forest-dark);
+}
+.prose-vardaan h3 {
+  font-family: var(--font-display);
+  font-size: 1.3rem;
+  margin: 1.6rem 0 0.5rem;
+  color: var(--color-forest-dark);
+}
+.prose-vardaan p {
+  margin: 0 0 1.15rem;
+}
+.prose-vardaan a {
+  color: var(--color-forest);
+  text-decoration: underline;
+}
+.prose-vardaan ul,
+.prose-vardaan ol {
+  margin: 0 0 1.15rem 1.35rem;
+}
+.prose-vardaan ul {
+  list-style: disc;
+}
+.prose-vardaan ol {
+  list-style: decimal;
+}
+.prose-vardaan li {
+  margin: 0.35rem 0;
+}
+.prose-vardaan strong {
+  font-weight: 600;
+}
+.prose-vardaan blockquote {
+  border-left: 3px solid var(--color-terracotta);
+  padding-left: 1rem;
+  margin: 1.25rem 0;
+  color: var(--color-stone);
+}
+
 /* Accessibility: honour reduced-motion globally (Doc 06 §7) */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {

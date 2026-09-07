@@ -45,10 +45,14 @@ export const site = {
 
 export const nav = [
   { label: "Home", href: "/" },
-  { label: "Our Farm", href: "/our-farm" },
-  { label: "Our Eggs & Supply", href: "/our-eggs-and-supply" },
-  { label: "Partner With Us", href: "/partner-with-us" },
+  { label: "About", href: "/about" },
+  { label: "Our Eggs", href: "/products" },
+  { label: "Blog", href: "/blog" },
+  { label: "Contact", href: "/contact" },
 ] as const;
+
+/** The primary conversion destination (Doc 04 sitemap). */
+export const enquiryHref = "/wholesale-enquiry";
 
 /** Pre-filled WhatsApp deep link. */
 export function whatsappLink(message?: string): string {

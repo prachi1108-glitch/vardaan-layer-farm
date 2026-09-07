@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Logo } from "@/components/Logo";
 import { ButtonLink } from "@/components/ui/Button";
-import { nav } from "@/lib/site";
+import { nav, enquiryHref } from "@/lib/site";
 
 export function Header() {
   const pathname = usePathname();
@@ -59,8 +59,8 @@ export function Header() {
         </nav>
 
         <div className="hidden lg:block">
-          <ButtonLink href="/partner-with-us" size="md">
-            Enquire Now
+          <ButtonLink href={enquiryHref} size="md">
+            Get a Quote
           </ButtonLink>
         </div>
 
@@ -113,8 +113,8 @@ export function Header() {
                 </Link>
               );
             })}
-            <ButtonLink href="/partner-with-us" size="lg" className="mt-3">
-              Enquire Now
+            <ButtonLink href={enquiryHref} size="lg" className="mt-3">
+              Get a Quote
             </ButtonLink>
           </nav>
         </div>

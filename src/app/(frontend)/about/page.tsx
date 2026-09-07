@@ -8,13 +8,13 @@ import { FinalCta } from "@/components/FinalCta";
 import { site } from "@/lib/site";
 
 export const metadata: Metadata = {
-  title: "Our Farm",
+  title: "About",
   description:
-    "Inside Vardhan Farms — our story, our operation and the people behind our table-egg production.",
+    "Inside Vardaan Layer Farm — our story, our layer-poultry operation, and the people behind our bulk egg supply.",
 };
 
 const timeline = [
-  { year: "Established", title: "The farm begins", body: "Vardhan Farms starts as a hands-on layer-poultry operation. [Replace with real founding year & story.]" },
+  { year: "Established", title: "The farm begins", body: "Vardaan Layer Farm starts as a hands-on layer-poultry operation. [Replace with real founding year & story.]" },
   { year: "Growth", title: "Production expands", body: "Flock size and daily output grow to meet rising demand. [Replace with real milestone.]" },
   { year: "Relationships", title: "Long-term buyers", body: "Steady supply builds lasting relationships with wholesalers and bulk buyers. [Replace with real detail.]" },
   { year: "Today", title: "Operations developed", body: "A settled routine across rearing, laying, collection and dispatch. [Replace with real detail.]" },
@@ -45,15 +45,15 @@ const gallery = [
   { label: "Packing & trays", tone: "sand" as const, span: "aspect-[4/3]" },
 ];
 
-export default function OurFarmPage() {
+export default function AboutPage() {
   return (
     <>
       <PageHero
         eyebrow="Our Farm"
         title="A real, working farm behind every egg."
-        intro="No stock imagery, no invented story. This is the operation, the process and the people that make our table-egg supply dependable."
+        intro="No stock imagery, no invented story. This is the operation, the process and the people that make our bulk egg supply dependable."
       >
-        <ButtonLink href="/partner-with-us" variant="secondary">
+        <ButtonLink href="/wholesale-enquiry" variant="secondary">
           Enquire about supply
         </ButtonLink>
       </PageHero>

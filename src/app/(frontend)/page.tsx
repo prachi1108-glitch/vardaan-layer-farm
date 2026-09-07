@@ -20,21 +20,21 @@ const audiences = [
     icon: <Icon.Business />,
     title: "For Businesses",
     body: "Wholesalers, dealers, distributors, restaurants, bakeries, cloud kitchens, hotels and institutions.",
-    href: "/our-eggs-and-supply#business",
+    href: "/products",
     cta: "Bulk & B2B supply",
   },
   {
     icon: <Icon.Store />,
     title: "For Retail",
     body: "Kirana stores, grocery stores, supermarkets and modern-trade retail networks.",
-    href: "/our-eggs-and-supply#retail",
+    href: "/products",
     cta: "Retail partnerships",
   },
   {
     icon: <Icon.People />,
     title: "For Consumers",
     body: "Families and regular consumers — with branded consumer packs planned as we expand.",
-    href: "/our-eggs-and-supply#consumer",
+    href: "/products",
     cta: "What's coming",
   },
 ];
@@ -67,11 +67,11 @@ export default function HomePage() {
               and retail partners with a steady, dependable flow.
             </p>
             <div className="mt-8 flex flex-wrap gap-3">
-              <ButtonLink href="/partner-with-us" size="lg">
+              <ButtonLink href="/wholesale-enquiry" size="lg">
                 Get a Quote
               </ButtonLink>
-              <ButtonLink href="/our-eggs-and-supply" size="lg" variant="secondary">
-                Explore egg supply
+              <ButtonLink href="/products" size="lg" variant="secondary">
+                Explore our eggs
               </ButtonLink>
             </div>
             <dl className="mt-10 flex flex-wrap gap-x-10 gap-y-4 border-t border-line pt-6">
@@ -222,7 +222,7 @@ export default function HomePage() {
               title="Real strengths, not marketing claims."
               intro="We keep it straight: what makes us a dependable supplier comes down to experience, consistency and the way the farm is run."
             />
-            <ButtonLink href="/our-farm" variant="secondary" className="mt-8">
+            <ButtonLink href="/about" variant="secondary" className="mt-8">
               See inside the farm
             </ButtonLink>
           </div>

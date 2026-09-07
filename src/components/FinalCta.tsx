@@ -27,16 +27,16 @@ export function FinalCta() {
             you need and we&apos;ll get back to you.
           </p>
           <div className="mt-8 flex flex-wrap justify-center gap-3">
-            <ButtonLink href="/partner-with-us" size="lg" variant="light">
-              Enquire now
+            <ButtonLink href="/wholesale-enquiry" size="lg" variant="light">
+              Get a Quote
             </ButtonLink>
             <ButtonLink
-              href="/our-eggs-and-supply"
+              href="/products"
               size="lg"
               variant="ghost"
               className="text-cream hover:bg-cream/10"
             >
-              Explore supply options
+              Explore our eggs
             </ButtonLink>
           </div>
         </div>
