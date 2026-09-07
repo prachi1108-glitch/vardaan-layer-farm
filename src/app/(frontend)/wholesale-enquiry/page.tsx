@@ -3,7 +3,8 @@ import { PageHero } from "@/components/PageHero";
 import { Section, SectionHeading } from "@/components/ui/Section";
 import { EnquiryForm } from "@/components/EnquiryForm";
 import { Icon } from "@/components/icons";
-import { site, whatsappLink, defaultWhatsappMessage } from "@/lib/site";
+import { getContact } from "@/lib/cms";
+import { whatsappLink, defaultWhatsappMessage } from "@/lib/site";
 
 export const metadata: Metadata = {
   title: "Wholesale Enquiry",
@@ -29,24 +30,26 @@ const nextSteps = [
   },
 ];
 
-export default function WholesaleEnquiryPage() {
+export default async function WholesaleEnquiryPage() {
+  const contact = await getContact();
+  const waHref = whatsappLink(defaultWhatsappMessage, contact.whatsappE164);
   const contactMethods = [
     {
       icon: <Icon.Phone />,
       title: "Call us",
-      value: site.contact.phoneDisplay,
-      href: `tel:+${site.contact.phoneE164}`,
+      value: contact.phoneDisplay,
+      href: `tel:+${contact.phoneE164}`,
     },
     {
       icon: <Icon.Mail />,
       title: "Email",
-      value: site.contact.email,
-      href: `mailto:${site.contact.email}`,
+      value: contact.email,
+      href: `mailto:${contact.email}`,
     },
     {
       icon: <Icon.Pin />,
       title: "Find us",
-      value: site.contact.locationLine,
+      value: contact.locationLine,
       href: undefined,
     },
   ];
@@ -68,7 +71,7 @@ export default function WholesaleEnquiryPage() {
               intro="Fields marked * are required. Everything else is optional — it just helps us quote faster."
               className="mb-8"
             />
-            <EnquiryForm />
+            <EnquiryForm whatsappHref={waHref} />
           </div>
 
           <aside className="lg:sticky lg:top-28 lg:self-start">
@@ -99,7 +102,7 @@ export default function WholesaleEnquiryPage() {
                 WhatsApp is the fastest way to get a response for business enquiries.
               </p>
               <a
-                href={whatsappLink(defaultWhatsappMessage)}
+                href={waHref}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="mt-5 flex items-center justify-center gap-2 rounded-full bg-[#25D366] px-5 py-3 text-sm font-semibold text-white"

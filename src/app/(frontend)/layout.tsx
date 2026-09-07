@@ -5,7 +5,8 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { WhatsAppFloat } from "@/components/WhatsAppFloat";
 import { RevealInit } from "@/components/motion/RevealInit";
-import { site } from "@/lib/site";
+import { getContact } from "@/lib/cms";
+import { whatsappLink, defaultWhatsappMessage, site } from "@/lib/site";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -33,7 +34,8 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({ children }: LayoutProps<"/">) {
+export default async function RootLayout({ children }: LayoutProps<"/">) {
+  const contact = await getContact();
   return (
     <html
       lang="en"
@@ -46,8 +48,10 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         </noscript>
         <Header />
         <main className="flex-1">{children}</main>
-        <Footer />
-        <WhatsAppFloat />
+        <Footer contact={contact} />
+        <WhatsAppFloat
+          href={whatsappLink(defaultWhatsappMessage, contact.whatsappE164)}
+        />
         <RevealInit />
       </body>
     </html>

@@ -5,6 +5,7 @@ import { Icon } from "@/components/icons";
 import { FinalCta } from "@/components/FinalCta";
 import { HeroScene } from "@/components/HeroScene";
 import { CountUp } from "@/components/motion/CountUp";
+import { getHomeContent } from "@/lib/cms";
 import { site } from "@/lib/site";
 
 const journey: ProcessStep[] = [
@@ -47,7 +48,27 @@ const strengths = [
   { icon: <Icon.ShieldCheck />, title: "Careful operations", body: "Managed feed, water, hygiene and egg handling across the farm's daily routine." },
 ];
 
-export default function HomePage() {
+export default async function HomePage() {
+  const home = await getHomeContent();
+  const heroEyebrow = home?.heroEyebrow || "Layer poultry farm · Table eggs";
+  const heroHeading =
+    home?.heroHeading || "Reliable egg supply, from healthy flocks to every table.";
+  const heroSub =
+    home?.heroSubheading ||
+    `${site.name} is an experienced layer-poultry operation producing fresh table eggs at scale — supplying wholesalers, food businesses and retail partners with a steady, dependable flow.`;
+  const ctaPrimary = {
+    label: home?.ctaPrimaryLabel || "Get a Quote",
+    href: home?.ctaPrimaryHref || "/wholesale-enquiry",
+  };
+  const ctaSecondary = {
+    label: home?.ctaSecondaryLabel || "Explore our eggs",
+    href: home?.ctaSecondaryHref || "/products",
+  };
+  const stats =
+    home?.trustStats && home.trustStats.length > 0
+      ? home.trustStats
+      : site.stats.map((s) => ({ value: s.value, label: s.label }));
+
   return (
     <>
       {/* ---------------- Hero ---------------- */}
@@ -58,25 +79,21 @@ export default function HomePage() {
         />
         <div className="container-x grid items-center gap-12 pb-16 pt-10 sm:pt-14 lg:grid-cols-[1.05fr_0.95fr] lg:gap-16 lg:pb-24">
           <div className="reveal max-w-xl">
-            <Eyebrow>Layer poultry farm · Table eggs</Eyebrow>
+            <Eyebrow>{heroEyebrow}</Eyebrow>
             <h1 className="mt-5 text-4xl leading-[1.05] sm:text-5xl lg:text-6xl">
-              Reliable egg supply, from healthy flocks to every table.
+              {heroHeading}
             </h1>
-            <p className="mt-6 text-lg leading-relaxed text-stone">
-              {site.name} is an experienced layer-poultry operation producing
-              fresh table eggs at scale — supplying wholesalers, food businesses
-              and retail partners with a steady, dependable flow.
-            </p>
+            <p className="mt-6 text-lg leading-relaxed text-stone">{heroSub}</p>
             <div className="mt-8 flex flex-wrap gap-3">
-              <ButtonLink href="/wholesale-enquiry" size="lg">
-                Get a Quote
+              <ButtonLink href={ctaPrimary.href} size="lg">
+                {ctaPrimary.label}
               </ButtonLink>
-              <ButtonLink href="/products" size="lg" variant="secondary">
-                Explore our eggs
+              <ButtonLink href={ctaSecondary.href} size="lg" variant="secondary">
+                {ctaSecondary.label}
               </ButtonLink>
             </div>
             <dl className="mt-10 flex flex-wrap gap-x-10 gap-y-4 border-t border-line pt-6">
-              {site.stats.slice(0, 3).map((s) => (
+              {stats.slice(0, 3).map((s) => (
                 <div key={s.label}>
                   <dt className="font-display text-2xl text-forest-dark">
                     {s.value}
@@ -155,7 +172,7 @@ export default function HomePage() {
             </p>
           </div>
           <dl className="mt-10 grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
-            {site.stats.map((s) => (
+            {stats.map((s) => (
               <div key={s.label} className="border-t border-cream/15 pt-5">
                 <dt className="font-display text-4xl text-cream">
                   <CountUp value={s.value} />
@@ -240,7 +257,12 @@ export default function HomePage() {
       </Section>
 
       {/* ---------------- Final CTA ---------------- */}
-      <FinalCta />
+      <FinalCta
+        heading={home?.ctaBandHeading}
+        text={home?.ctaBandText}
+        buttonLabel={home?.ctaBandButtonLabel}
+        buttonHref={home?.ctaBandButtonHref}
+      />
     </>
   );
 }

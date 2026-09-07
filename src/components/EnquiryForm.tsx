@@ -57,7 +57,7 @@ function LabelWrap({
   );
 }
 
-export function EnquiryForm() {
+export function EnquiryForm({ whatsappHref }: { whatsappHref?: string } = {}) {
   const [businessType, setBusinessType] = useState("");
   const [status, setStatus] = useState<"idle" | "sending" | "done" | "error">(
     "idle"
@@ -65,9 +65,9 @@ export function EnquiryForm() {
   const [errorMsg, setErrorMsg] = useState("");
   const formRef = useRef<HTMLFormElement>(null);
 
-  const waHref = whatsappLink(
-    `Hi ${site.name}, I'd like to enquire about your bulk egg supply.`
-  );
+  const waHref =
+    whatsappHref ||
+    whatsappLink(`Hi ${site.name}, I'd like to enquire about your bulk egg supply.`);
 
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();

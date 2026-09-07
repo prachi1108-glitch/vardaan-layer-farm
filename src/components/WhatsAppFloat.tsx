@@ -1,10 +1,10 @@
 import { whatsappLink, defaultWhatsappMessage } from "@/lib/site";
 
 /** Floating WhatsApp button — a key B2B conversion channel in India. */
-export function WhatsAppFloat() {
+export function WhatsAppFloat({ href }: { href?: string }) {
   return (
     <a
-      href={whatsappLink(defaultWhatsappMessage)}
+      href={href || whatsappLink(defaultWhatsappMessage)}
       target="_blank"
       rel="noopener noreferrer"
       aria-label="Chat with us on WhatsApp"

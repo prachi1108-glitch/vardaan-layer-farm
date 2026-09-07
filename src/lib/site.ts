@@ -22,7 +22,7 @@ export const site = {
     // Use full international format for tel: and wa.me links.
     phoneDisplay: "+91 90000 00000", // PLACEHOLDER
     phoneE164: "919000000000", // PLACEHOLDER (no + / spaces, for wa.me & tel)
-    email: "hello@vardhanfarms.com", // PLACEHOLDER
+    email: "hello@vardaanlayerfarm.com", // PLACEHOLDER
     whatsappE164: "919000000000", // PLACEHOLDER
     // Farm address / service base.
     locationLine: "Your City, State, India", // PLACEHOLDER
@@ -54,9 +54,9 @@ export const nav = [
 /** The primary conversion destination (Doc 04 sitemap). */
 export const enquiryHref = "/wholesale-enquiry";
 
-/** Pre-filled WhatsApp deep link. */
-export function whatsappLink(message?: string): string {
-  const base = `https://wa.me/${site.contact.whatsappE164}`;
+/** Pre-filled WhatsApp deep link. Pass an e164 number to override the default. */
+export function whatsappLink(message?: string, e164?: string): string {
+  const base = `https://wa.me/${e164 || site.contact.whatsappE164}`;
   return message ? `${base}?text=${encodeURIComponent(message)}` : base;
 }
 

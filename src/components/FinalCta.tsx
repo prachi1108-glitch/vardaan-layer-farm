@@ -5,7 +5,23 @@ import { ButtonLink } from "@/components/ui/Button";
  * Full-width closing call-to-action band used at the foot of several pages,
  * steering visitors to the wholesale enquiry. (Doc 04 §3 "CTA band".)
  */
-export function FinalCta() {
+export function FinalCta({
+  heading,
+  text,
+  buttonLabel,
+  buttonHref,
+}: {
+  heading?: string | null;
+  text?: string | null;
+  buttonLabel?: string | null;
+  buttonHref?: string | null;
+} = {}) {
+  const h = heading || "Let’s talk about your egg supply.";
+  const t =
+    text ||
+    "Bulk requirements, retail partnerships or distribution — tell us what you need and we’ll get back to you.";
+  const bLabel = buttonLabel || "Get a Quote";
+  const bHref = buttonHref || "/wholesale-enquiry";
   return (
     <Section>
       <div className="relative overflow-hidden rounded-3xl bg-forest px-6 py-14 text-center sm:px-12 sm:py-20">
@@ -19,16 +35,11 @@ export function FinalCta() {
           }}
         />
         <div className="relative mx-auto max-w-2xl">
-          <h2 className="text-3xl text-cream sm:text-4xl">
-            Let&apos;s talk about your egg supply.
-          </h2>
-          <p className="mt-4 text-lg text-cream/80">
-            Bulk requirements, retail partnerships or distribution — tell us what
-            you need and we&apos;ll get back to you.
-          </p>
+          <h2 className="text-3xl text-cream sm:text-4xl">{h}</h2>
+          <p className="mt-4 text-lg text-cream/80">{t}</p>
           <div className="mt-8 flex flex-wrap justify-center gap-3">
-            <ButtonLink href="/wholesale-enquiry" size="lg" variant="light">
-              Get a Quote
+            <ButtonLink href={bHref} size="lg" variant="light">
+              {bLabel}
             </ButtonLink>
             <ButtonLink
               href="/products"

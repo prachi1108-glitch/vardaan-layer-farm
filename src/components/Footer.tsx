@@ -1,8 +1,9 @@
 import Link from "next/link";
 import { Logo } from "@/components/Logo";
 import { nav, site, whatsappLink, defaultWhatsappMessage } from "@/lib/site";
+import type { ContactInfo } from "@/lib/cms";
 
-export function Footer() {
+export function Footer({ contact }: { contact: ContactInfo }) {
   return (
     <footer className="mt-auto bg-forest-deep text-cream/80">
       <div className="container-x py-16">
@@ -39,15 +40,15 @@ export function Footer() {
             <ul className="mt-4 space-y-2.5 text-sm">
               <li>
                 <a
-                  href={`tel:+${site.contact.phoneE164}`}
+                  href={`tel:+${contact.phoneE164}`}
                   className="text-cream/80 transition-colors hover:text-cream"
                 >
-                  {site.contact.phoneDisplay}
+                  {contact.phoneDisplay}
                 </a>
               </li>
               <li>
                 <a
-                  href={whatsappLink(defaultWhatsappMessage)}
+                  href={whatsappLink(defaultWhatsappMessage, contact.whatsappE164)}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-cream/80 transition-colors hover:text-cream"
@@ -57,13 +58,13 @@ export function Footer() {
               </li>
               <li>
                 <a
-                  href={`mailto:${site.contact.email}`}
+                  href={`mailto:${contact.email}`}
                   className="text-cream/80 transition-colors hover:text-cream"
                 >
-                  {site.contact.email}
+                  {contact.email}
                 </a>
               </li>
-              <li className="pt-1 text-cream/60">{site.contact.locationLine}</li>
+              <li className="pt-1 text-cream/60">{contact.locationLine}</li>
             </ul>
           </div>
         </div>

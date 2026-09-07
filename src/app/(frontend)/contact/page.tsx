@@ -3,7 +3,8 @@ import { PageHero } from "@/components/PageHero";
 import { Section, SectionHeading } from "@/components/ui/Section";
 import { EnquiryForm } from "@/components/EnquiryForm";
 import { Icon } from "@/components/icons";
-import { site, whatsappLink, defaultWhatsappMessage } from "@/lib/site";
+import { getContact } from "@/lib/cms";
+import { whatsappLink, defaultWhatsappMessage } from "@/lib/site";
 
 export const metadata: Metadata = {
   title: "Contact",
@@ -11,31 +12,33 @@ export const metadata: Metadata = {
     "Get in touch with Vardaan Layer Farm — phone, WhatsApp, email and farm address for bulk egg supply enquiries.",
 };
 
-export default function ContactPage() {
+export default async function ContactPage() {
+  const contact = await getContact();
+  const waHref = whatsappLink(defaultWhatsappMessage, contact.whatsappE164);
   const methods = [
     {
       icon: <Icon.Phone />,
       title: "Phone",
-      value: site.contact.phoneDisplay,
-      href: `tel:+${site.contact.phoneE164}`,
+      value: contact.phoneDisplay,
+      href: `tel:+${contact.phoneE164}`,
     },
     {
       icon: <Icon.Phone />,
       title: "WhatsApp",
       value: "Chat with us",
-      href: whatsappLink(defaultWhatsappMessage),
+      href: waHref,
       external: true,
     },
     {
       icon: <Icon.Mail />,
       title: "Email",
-      value: site.contact.email,
-      href: `mailto:${site.contact.email}`,
+      value: contact.email,
+      href: `mailto:${contact.email}`,
     },
     {
       icon: <Icon.Pin />,
       title: "Farm address",
-      value: site.contact.locationLine,
+      value: contact.locationLine,
     },
   ];
 
@@ -87,10 +90,10 @@ export default function ContactPage() {
             </ul>
 
             <div className="mt-4">
-              {site.contact.mapEmbedUrl ? (
+              {contact.mapEmbedUrl ? (
                 <div className="overflow-hidden rounded-2xl border border-line">
                   <iframe
-                    src={site.contact.mapEmbedUrl}
+                    src={contact.mapEmbedUrl}
                     title="Farm location map"
                     className="h-64 w-full"
                     loading="lazy"
@@ -104,8 +107,8 @@ export default function ContactPage() {
                   </div>
                   <p className="mt-1">
                     Add a Google Maps embed URL in{" "}
-                    <code className="rounded bg-sand px-1">src/lib/site.ts</code> to show
-                    the farm location here.
+                    <code className="rounded bg-sand px-1">Site Settings</code> (in
+                    /admin) to show the farm location here.
                   </p>
                 </div>
               )}
@@ -119,7 +122,7 @@ export default function ContactPage() {
               title="Tell us what you need"
               className="mb-8"
             />
-            <EnquiryForm />
+            <EnquiryForm whatsappHref={waHref} />
           </div>
         </div>
       </Section>
