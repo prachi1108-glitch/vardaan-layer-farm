@@ -1,9 +1,10 @@
 import { ButtonLink } from "@/components/ui/Button";
 import { Section, SectionHeading, Eyebrow } from "@/components/ui/Section";
-import { ImagePlaceholder } from "@/components/ui/ImagePlaceholder";
 import { ProcessFlow, type ProcessStep } from "@/components/ProcessFlow";
 import { Icon } from "@/components/icons";
 import { FinalCta } from "@/components/FinalCta";
+import { HeroScene } from "@/components/HeroScene";
+import { CountUp } from "@/components/motion/CountUp";
 import { site } from "@/lib/site";
 
 const journey: ProcessStep[] = [
@@ -89,11 +90,7 @@ export default function HomePage() {
           </div>
 
           <div className="reveal relative">
-            <ImagePlaceholder
-              label="Hero — wide farm view / laying houses"
-              tone="forest"
-              className="aspect-[4/5] w-full shadow-xl shadow-forest-deep/10"
-            />
+            <HeroScene className="w-full drop-shadow-xl" />
             <div className="absolute -bottom-5 -left-5 hidden max-w-[13rem] rounded-2xl border border-line bg-paper p-4 shadow-lg sm:block">
               <div className="flex items-center gap-2 text-forest">
                 <Icon.Egg className="h-5 w-5" />
@@ -146,7 +143,7 @@ export default function HomePage() {
 
       {/* ---------------- Farm snapshot / stats ---------------- */}
       <Section>
-        <div className="rounded-3xl bg-forest-deep px-6 py-12 text-cream sm:px-12">
+        <div className="reveal rounded-3xl bg-forest-deep px-6 py-12 text-cream sm:px-12">
           <div className="max-w-2xl">
             <Eyebrow>Farm snapshot</Eyebrow>
             <h2 className="mt-4 text-3xl text-cream sm:text-4xl">
@@ -160,7 +157,9 @@ export default function HomePage() {
           <dl className="mt-10 grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
             {site.stats.map((s) => (
               <div key={s.label} className="border-t border-cream/15 pt-5">
-                <dt className="font-display text-4xl text-cream">{s.value}</dt>
+                <dt className="font-display text-4xl text-cream">
+                  <CountUp value={s.value} />
+                </dt>
                 <dd className="mt-1 text-sm text-cream/70">{s.label}</dd>
               </div>
             ))}

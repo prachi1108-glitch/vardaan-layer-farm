@@ -4,6 +4,7 @@ import "./globals.css";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { WhatsAppFloat } from "@/components/WhatsAppFloat";
+import { RevealInit } from "@/components/motion/RevealInit";
 import { site } from "@/lib/site";
 
 const inter = Inter({
@@ -39,10 +40,15 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       className={`${inter.variable} ${playfair.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col bg-cream text-ink">
+        {/* Safety net: if JS never runs, scroll-reveal content stays visible. */}
+        <noscript>
+          <style>{`.reveal{opacity:1 !important;transform:none !important}`}</style>
+        </noscript>
         <Header />
         <main className="flex-1">{children}</main>
         <Footer />
         <WhatsAppFloat />
+        <RevealInit />
       </body>
     </html>
   );

@@ -53,6 +53,16 @@
   --breakpoint-content: 76rem;
 }
 
+/* Motion design tokens (Doc 06 §5) — consistent easing & timing everywhere */
+:root {
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --dur-fast: 180ms;
+  --dur-base: 420ms;
+  --dur-slow: 800ms;
+  --reveal-shift: 20px;
+}
+
 html {
   scroll-behavior: smooth;
 }
@@ -92,20 +102,93 @@ h1, h2, h3, h4 {
   }
 }
 
-/* Subtle rising-in animation for sections (respects reduced motion) */
+/* Scroll reveal — elements rise + fade as they enter the viewport.
+   The `.is-visible` class is added by RevealInit (IntersectionObserver).
+   For reduced-motion users the initial hidden state is never applied, so
+   content is always visible even if JS never runs. */
 @media (prefers-reduced-motion: no-preference) {
   .reveal {
     opacity: 0;
-    transform: translateY(16px);
-    animation: reveal 0.7s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    transform: translateY(var(--reveal-shift));
+    transition:
+      opacity var(--dur-base) var(--ease-out),
+      transform var(--dur-base) var(--ease-out);
+    transition-delay: var(--reveal-delay, 0ms);
+  }
+  .reveal.is-visible {
+    opacity: 1;
+    transform: none;
   }
 }
 
-@keyframes reveal {
-  to {
-    opacity: 1;
-    transform: translateY(0);
+/* -------- Hero "morning at the farm" scene (SVG + CSS) -------- */
+@media (prefers-reduced-motion: no-preference) {
+  .hero-sun {
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: sun-rise var(--dur-slow) var(--ease-out) both;
   }
+  .hero-rays {
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: rays-in 1200ms var(--ease-out) 200ms both, rays-spin 60s linear 1200ms infinite;
+  }
+  .hero-hen {
+    transform-box: fill-box;
+    transform-origin: bottom center;
+    animation: hen-settle 900ms var(--ease-out) 250ms both, hen-breathe 5s ease-in-out 1300ms infinite;
+  }
+  .hero-egg {
+    transform-box: fill-box;
+    transform-origin: center bottom;
+    opacity: 0;
+    animation: egg-settle 700ms var(--ease-out) both;
+  }
+  .hero-egg-1 { animation-delay: 750ms; }
+  .hero-egg-2 { animation-delay: 950ms; }
+  .hero-egg-3 { animation-delay: 1150ms; }
+}
+
+@keyframes sun-rise {
+  from { transform: translateY(26px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+@keyframes rays-in {
+  from { opacity: 0; }
+  to { opacity: 0.5; }
+}
+@keyframes rays-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+@keyframes hen-settle {
+  from { transform: translateY(-14px) scale(0.98); opacity: 0; }
+  to { transform: translateY(0) scale(1); opacity: 1; }
+}
+@keyframes hen-breathe {
+  0%, 100% { transform: translateY(0) scale(1); }
+  50% { transform: translateY(-1.5px) scale(1.012); }
+}
+@keyframes egg-settle {
+  0% { opacity: 0; transform: translateY(-16px) scale(0.9); }
+  60% { opacity: 1; transform: translateY(2px) scale(1.02); }
+  100% { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* Signature flourish: an egg that gently wobbles once when scrolled into view */
+@media (prefers-reduced-motion: no-preference) {
+  .egg-wobble.is-visible {
+    transform-box: fill-box;
+    transform-origin: bottom center;
+    animation: egg-wobble 1600ms var(--ease-in-out) both;
+  }
+}
+@keyframes egg-wobble {
+  0%, 100% { transform: rotate(0deg); }
+  20% { transform: rotate(-7deg); }
+  45% { transform: rotate(5deg); }
+  70% { transform: rotate(-3deg); }
+  85% { transform: rotate(1.5deg); }
 }
 
 /* Rich-text article styling for blog posts (lexical output) */
