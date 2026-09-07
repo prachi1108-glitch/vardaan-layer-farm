@@ -1,0 +1,119 @@
+@import "tailwindcss";
+
+/*
+ * Vardaan Layer Farm — brand design system.
+ * Palette and type sampled directly from Doc 03 (Brand Guidelines):
+ * warm cream/ivory ground (never dark), forest-green structure, GOLD accent
+ * for CTAs, warm-brown earthy detail. Playfair Display headings + Inter body.
+ *
+ * Token names below are the site's semantic names; the Doc 03 palette token
+ * each maps to is noted in a comment. (Names will be aligned to the doc's
+ * green and gold scale names during the Phase 3 page rework.)
+ */
+
+@theme {
+  /* Surfaces — cream / ivory (Doc 03 §2.3) */
+  --color-cream: #fbf7ec;       /* cream-50  — primary page background */
+  --color-cream-deep: #f5eedd;  /* cream-100 — alternating sections */
+  --color-sand: #eee4cc;        /* cream-200 — borders/subtle dividers */
+  --color-paper: #ffffff;       /* white     — cards, form fields */
+
+  /* Brand greens (Doc 03 §2.1) */
+  --color-forest: #245021;      /* green-700 — primary brand green (buttons/links) */
+  --color-forest-dark: #1b3e17; /* green-800 — headings, nav text */
+  --color-forest-deep: #12300f; /* green-900 — footer, display headings */
+  --color-moss: #2f6329;        /* green-600 — hover state for green */
+  --color-sage: #3e7a34;        /* green-500 — interactive accents */
+  --color-mist: #e7efe4;        /* green-100 — soft green section tint */
+
+  /* Gold / amber accent — the CTA + premium detailing colour (Doc 03 §2.2) */
+  --color-terracotta: #c79233;  /* gold-500 — primary CTA background, highlights */
+  --color-clay: #a9741d;        /* gold-600 — deep gold, large gold text on cream */
+  --color-wheat: #e6c173;       /* gold-300 — soft gold backgrounds/borders */
+  --color-gold-wash: #f6e9cc;   /* gold-100 — pale gold highlight panels */
+
+  /* Warm brown — earthy detail (Doc 03 §2.4) */
+  --color-brown: #5b3b24;       /* brown-700 — eyebrow labels, rustic detail */
+  --color-brown-muted: #7a5236; /* brown-500 — warm secondary text */
+
+  /* Ink / text (Doc 03 §2.6) */
+  --color-ink: #22271f;         /* ink-900 — primary body text */
+  --color-stone: #4e5348;       /* ink-600 — secondary text */
+  --color-ash: #807e72;         /* ink-400 — muted text, placeholders */
+  --color-line: #e4dcc8;        /* hairline borders/dividers on cream */
+
+  /* Sparing accents (Doc 03 §2.5) */
+  --color-rooster: #c0271c;     /* red-500 — form errors, tiny accents only */
+
+  /* Fonts (wired via next/font variables in layout.tsx) */
+  --font-sans: var(--font-inter), "Helvetica Neue", Arial, sans-serif;
+  --font-display: var(--font-playfair), Georgia, serif;
+
+  /* Content width */
+  --breakpoint-content: 76rem;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--color-cream);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* Headings default to the display serif (Playfair Display), forest green */
+h1, h2, h3, h4 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  letter-spacing: -0.005em;
+  color: var(--color-forest-dark);
+}
+
+::selection {
+  background: var(--color-moss);
+  color: #fff;
+}
+
+/* Reusable layout helper: centered content column with responsive padding */
+.container-x {
+  width: 100%;
+  max-width: var(--breakpoint-content);
+  margin-inline: auto;
+  padding-inline: 1.25rem;
+}
+
+@media (min-width: 640px) {
+  .container-x {
+    padding-inline: 2rem;
+  }
+}
+
+/* Subtle rising-in animation for sections (respects reduced motion) */
+@media (prefers-reduced-motion: no-preference) {
+  .reveal {
+    opacity: 0;
+    transform: translateY(16px);
+    animation: reveal 0.7s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  }
+}
+
+@keyframes reveal {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Accessibility: honour reduced-motion globally (Doc 06 §7) */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
