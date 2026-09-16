@@ -79,17 +79,17 @@ export default async function BlogPostPage({
     <>
       <Section className="!pb-0">
         <div className="mx-auto max-w-3xl">
-          <Link href="/blog" className="text-sm font-semibold text-forest hover:underline">
+          <Link href="/blog" className="text-sm font-semibold text-secondary hover:underline">
             ← All posts
           </Link>
-          <div className="mt-6 flex items-center gap-2 text-xs uppercase tracking-wide text-moss">
+          <div className="mt-6 flex items-center gap-2 text-xs uppercase tracking-wide text-tertiary">
             {category?.title ? <span>{category.title}</span> : null}
             {category?.title && post.publishedAt ? <span>·</span> : null}
             {post.publishedAt ? <span>{formatDate(post.publishedAt)}</span> : null}
           </div>
           <h1 className="mt-3 text-4xl leading-tight sm:text-5xl">{post.title}</h1>
           {post.excerpt ? (
-            <p className="mt-5 text-lg leading-relaxed text-stone">{post.excerpt}</p>
+            <p className="mt-5 text-lg leading-relaxed text-on-surface-variant">{post.excerpt}</p>
           ) : null}
         </div>
       </Section>
@@ -111,15 +111,15 @@ export default async function BlogPostPage({
             {post.content ? (
               <RichText data={post.content} />
             ) : (
-              <p className="text-stone">
+              <p className="text-on-surface-variant">
                 This post doesn&apos;t have body content yet. Add it in the CMS.
               </p>
             )}
           </article>
 
-          <div className="mt-12 rounded-2xl border border-line bg-cream p-8 text-center">
+          <div className="mt-12 rounded-2xl border border-outline-variant bg-surface-cream p-8 text-center">
             <h2 className="text-2xl">Need a reliable egg supplier?</h2>
-            <p className="mx-auto mt-2 max-w-md text-stone">
+            <p className="mx-auto mt-2 max-w-md text-on-surface-variant">
               Tell us your requirement and we&apos;ll get you a quote.
             </p>
             <ButtonLink href="/wholesale-enquiry" size="lg" className="mt-5">

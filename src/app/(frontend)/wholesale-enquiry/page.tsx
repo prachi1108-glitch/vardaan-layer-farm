@@ -75,19 +75,19 @@ export default async function WholesaleEnquiryPage() {
           </div>
 
           <aside className="lg:sticky lg:top-28 lg:self-start">
-            <div className="rounded-2xl border border-line bg-paper p-7">
+            <div className="rounded-2xl border border-outline-variant bg-surface-offwhite p-7">
               <h3 className="text-xl">What happens next</h3>
               <ol className="mt-5 space-y-5">
                 {nextSteps.map((s, i) => (
                   <li key={s.title} className="flex gap-4">
-                    <span className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-forest/8 text-forest">
+                    <span className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-secondary/8 text-secondary">
                       {s.icon}
                     </span>
                     <div>
-                      <div className="flex items-center gap-2 text-sm font-semibold text-forest-dark">
-                        <span className="text-terracotta">{i + 1}.</span> {s.title}
+                      <div className="flex items-center gap-2 text-sm font-semibold text-on-surface">
+                        <span className="text-secondary">{i + 1}.</span> {s.title}
                       </div>
-                      <p className="mt-1 text-sm leading-relaxed text-stone">
+                      <p className="mt-1 text-sm leading-relaxed text-on-surface-variant">
                         {s.body}
                       </p>
                     </div>
@@ -96,9 +96,9 @@ export default async function WholesaleEnquiryPage() {
               </ol>
             </div>
 
-            <div className="mt-4 rounded-2xl bg-forest-deep p-7 text-cream">
-              <h3 className="text-lg text-cream">Rather talk to us directly?</h3>
-              <p className="mt-2 text-sm text-cream/70">
+            <div className="mt-4 rounded-2xl bg-on-surface p-7 text-surface-cream">
+              <h3 className="text-lg text-surface-cream">Rather talk to us directly?</h3>
+              <p className="mt-2 text-sm text-surface-cream/70">
                 WhatsApp is the fastest way to get a response for business enquiries.
               </p>
               <a
@@ -109,23 +109,23 @@ export default async function WholesaleEnquiryPage() {
               >
                 <Icon.Phone className="h-5 w-5" /> Chat on WhatsApp
               </a>
-              <div className="mt-6 space-y-1 border-t border-cream/15 pt-6">
+              <div className="mt-6 space-y-1 border-t border-surface-cream/15 pt-6">
                 {contactMethods.map((m) => {
                   const inner = (
                     <div className="flex items-center gap-3 rounded-xl px-2 py-2.5">
-                      <span className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-cream/10 text-cream">
+                      <span className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-surface-cream/10 text-surface-cream">
                         {m.icon}
                       </span>
                       <div>
-                        <div className="text-xs uppercase tracking-wide text-cream/50">
+                        <div className="text-xs uppercase tracking-wide text-surface-cream/50">
                           {m.title}
                         </div>
-                        <div className="text-sm text-cream">{m.value}</div>
+                        <div className="text-sm text-surface-cream">{m.value}</div>
                       </div>
                     </div>
                   );
                   return m.href ? (
-                    <a key={m.title} href={m.href} className="block hover:bg-cream/5">
+                    <a key={m.title} href={m.href} className="block hover:bg-surface-cream/5">
                       {inner}
                     </a>
                   ) : (

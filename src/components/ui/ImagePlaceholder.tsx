@@ -12,10 +12,10 @@ import type { ReactNode } from "react";
 type Tone = "forest" | "sand" | "terracotta" | "moss";
 
 const tones: Record<Tone, string> = {
-  forest: "from-forest-deep to-forest text-cream/70",
-  sand: "from-cream-deep to-sand text-stone",
-  terracotta: "from-clay to-terracotta text-cream/80",
-  moss: "from-forest to-moss text-cream/75",
+  forest: "from-on-surface to-secondary text-surface-cream/70",
+  sand: "from-surface-offwhite to-surface-container-high text-on-surface-variant",
+  terracotta: "from-secondary to-secondary text-surface-cream/80",
+  moss: "from-secondary to-tertiary text-surface-cream/75",
 };
 
 export function ImagePlaceholder({

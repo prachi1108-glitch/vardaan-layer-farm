@@ -24,7 +24,7 @@ export function FinalCta({
   const bHref = buttonHref || "/wholesale-enquiry";
   return (
     <Section>
-      <div className="relative overflow-hidden rounded-3xl bg-forest px-6 py-14 text-center sm:px-12 sm:py-20">
+      <div className="relative overflow-hidden rounded-3xl bg-secondary px-6 py-14 text-center sm:px-12 sm:py-20">
         <div
           aria-hidden
           className="absolute inset-0 opacity-[0.08]"
@@ -35,8 +35,8 @@ export function FinalCta({
           }}
         />
         <div className="relative mx-auto max-w-2xl">
-          <h2 className="text-3xl text-cream sm:text-4xl">{h}</h2>
-          <p className="mt-4 text-lg text-cream/80">{t}</p>
+          <h2 className="text-3xl text-surface-cream sm:text-4xl">{h}</h2>
+          <p className="mt-4 text-lg text-surface-cream/80">{t}</p>
           <div className="mt-8 flex flex-wrap justify-center gap-3">
             <ButtonLink href={bHref} size="lg" variant="light">
               {bLabel}
@@ -45,7 +45,7 @@ export function FinalCta({
               href="/products"
               size="lg"
               variant="ghost"
-              className="text-cream hover:bg-cream/10"
+              className="text-surface-cream hover:bg-surface-cream/10"
             >
               Explore our eggs
             </ButtonLink>

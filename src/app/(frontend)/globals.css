@@ -1,118 +1,312 @@
 @import "tailwindcss";
 
 /*
- * Vardaan Layer Farm — brand design system.
- * Palette and type sampled directly from Doc 03 (Brand Guidelines):
- * warm cream/ivory ground (never dark), forest-green structure, GOLD accent
- * for CTAs, warm-brown earthy detail. Playfair Display headings + Inter body.
+ * Vardaan Layer Farm — "Warm Editorial Agritech" design system.
  *
- * Token names below are the site's semantic names; the Doc 03 palette token
- * each maps to is noted in a comment. (Names will be aligned to the doc's
- * green and gold scale names during the Phase 3 page rework.)
+ * Translated from the supplied Stitch design (DESIGN.md + code.html), which
+ * supersedes the earlier forest-green/gold palette. Light-first on warm cream
+ * surfaces, deep-brown ink, primary yellow for actions, with full-bleed dark
+ * brown feature bands. Playfair Display (editorial headings) + Inter (all
+ * operational/data copy).
  */
 
 @theme {
-  /* Surfaces — cream / ivory (Doc 03 §2.3) */
-  --color-cream: #fbf7ec;       /* cream-50  — primary page background */
-  --color-cream-deep: #f5eedd;  /* cream-100 — alternating sections */
-  --color-sand: #eee4cc;        /* cream-200 — borders/subtle dividers */
-  --color-paper: #ffffff;       /* white     — cards, form fields */
+  /* ---- Core surfaces ---- */
+  --color-surface: #fff8f6;
+  --color-surface-dim: #f6d2c9;
+  --color-surface-bright: #fff8f6;
+  --color-surface-container-lowest: #ffffff;
+  --color-surface-container-low: #fff1ed;
+  --color-surface-container: #ffe9e4;
+  --color-surface-container-high: #ffe2db;
+  --color-surface-container-highest: #ffdbd1;
+  --color-surface-variant: #ffdbd1;
+  --color-background: #fff8f6;
 
-  /* Brand greens (Doc 03 §2.1) */
-  --color-forest: #245021;      /* green-700 — primary brand green (buttons/links) */
-  --color-forest-dark: #1b3e17; /* green-800 — headings, nav text */
-  --color-forest-deep: #12300f; /* green-900 — footer, display headings */
-  --color-moss: #2f6329;        /* green-600 — hover state for green */
-  --color-sage: #3e7a34;        /* green-500 — interactive accents */
-  --color-mist: #e7efe4;        /* green-100 — soft green section tint */
+  /* Signature warm surfaces */
+  --color-surface-cream: #fff3db;
+  --color-surface-offwhite: #fffaf1;
+  --color-surface-dark-card: #2d1b14;
+  --color-pure-white: #ffffff;
 
-  /* Gold / amber accent — the CTA + premium detailing colour (Doc 03 §2.2) */
-  --color-terracotta: #c79233;  /* gold-500 — primary CTA background, highlights */
-  --color-clay: #a9741d;        /* gold-600 — deep gold, large gold text on cream */
-  --color-wheat: #e6c173;       /* gold-300 — soft gold backgrounds/borders */
-  --color-gold-wash: #f6e9cc;   /* gold-100 — pale gold highlight panels */
+  /* ---- Ink / text ---- */
+  --color-on-surface: #2a1711;
+  --color-on-surface-variant: #4c4732;
+  --color-on-background: #2a1711;
+  --color-inverse-surface: #412b25;
+  --color-inverse-on-surface: #ffede8;
+  --color-text-dark-secondary: #e9dccb;
+  /* Deep brown ink used for full-bleed dark bands */
+  --color-deep-ink: #23110c;
 
-  /* Warm brown — earthy detail (Doc 03 §2.4) */
-  --color-brown: #5b3b24;       /* brown-700 — eyebrow labels, rustic detail */
-  --color-brown-muted: #7a5236; /* brown-500 — warm secondary text */
+  /* ---- Outlines ---- */
+  --color-outline: #7e775f;
+  --color-outline-variant: #cfc6ab;
 
-  /* Ink / text (Doc 03 §2.6) */
-  --color-ink: #22271f;         /* ink-900 — primary body text */
-  --color-stone: #4e5348;       /* ink-600 — secondary text */
-  --color-ash: #807e72;         /* ink-400 — muted text, placeholders */
-  --color-line: #e4dcc8;        /* hairline borders/dividers on cream */
+  /* ---- Primary (yellow action colour) ---- */
+  --color-primary: #6e5e00;
+  --color-on-primary: #ffffff;
+  --color-primary-container: #fcd901;
+  --color-on-primary-container: #6f5f00;
+  --color-inverse-primary: #e5c500;
+  --color-primary-fixed: #ffe259;
+  --color-primary-fixed-dim: #e5c500;
+  --color-on-primary-fixed: #211b00;
+  --color-on-primary-fixed-variant: #534600;
+  --color-surface-tint: #6e5e00;
 
-  /* Sparing accents (Doc 03 §2.5) */
-  --color-rooster: #c0271c;     /* red-500 — form errors, tiny accents only */
+  /* ---- Secondary (earthy brown) ---- */
+  --color-secondary: #954831;
+  --color-on-secondary: #ffffff;
+  --color-secondary-container: #ff9c7f;
+  --color-on-secondary-container: #78321c;
+  --color-secondary-fixed: #ffdbd1;
+  --color-secondary-fixed-dim: #ffb59f;
+  --color-on-secondary-fixed: #3a0a00;
+  --color-on-secondary-fixed-variant: #77311c;
+  /* Earthy brown used for borders/outline actions */
+  --color-earth: #7f3721;
 
-  /* Fonts (wired via next/font variables in layout.tsx) */
-  --font-sans: var(--font-inter), "Helvetica Neue", Arial, sans-serif;
-  --font-display: var(--font-playfair), Georgia, serif;
+  /* ---- Tertiary (muted olive) ---- */
+  --color-tertiary: #56642b;
+  --color-on-tertiary: #ffffff;
+  --color-tertiary-container: #d1e29b;
+  --color-on-tertiary-container: #57652b;
+  --color-tertiary-fixed: #d9eaa2;
+  --color-tertiary-fixed-dim: #bdce89;
+  --color-on-tertiary-fixed: #161e00;
+  --color-on-tertiary-fixed-variant: #3f4c15;
+  --color-olive: #7c8b4d;
 
-  /* Content width */
-  --breakpoint-content: 76rem;
+  /* ---- Accents ---- */
+  --color-accent-tan: #c38552;
+  --color-accent-gold: #d2af56;
+
+  /* ---- Error ---- */
+  --color-error: #ba1a1a;
+  --color-on-error: #ffffff;
+  --color-error-container: #ffdad6;
+  --color-on-error-container: #93000a;
+
+  /* ---- Type families ---- */
+  --font-display-hero: var(--font-playfair), Georgia, serif;
+  --font-display-hero-mobile: var(--font-playfair), Georgia, serif;
+  --font-headline-lg: var(--font-playfair), Georgia, serif;
+  --font-headline-lg-mobile: var(--font-playfair), Georgia, serif;
+  --font-headline-md: var(--font-playfair), Georgia, serif;
+  --font-headline-sm: var(--font-inter), "Helvetica Neue", Arial, sans-serif;
+  --font-metric-display: var(--font-inter), "Helvetica Neue", Arial, sans-serif;
+  --font-body-lg: var(--font-inter), "Helvetica Neue", Arial, sans-serif;
+  --font-body-md: var(--font-inter), "Helvetica Neue", Arial, sans-serif;
+  --font-body-sm: var(--font-inter), "Helvetica Neue", Arial, sans-serif;
+  --font-label-md: var(--font-inter), "Helvetica Neue", Arial, sans-serif;
+  --font-label-caps: var(--font-inter), "Helvetica Neue", Arial, sans-serif;
+
+  /* ---- Type scale ---- */
+  --text-display-hero: 56px;
+  --text-display-hero--line-height: 64px;
+  --text-display-hero--letter-spacing: -0.02em;
+  --text-display-hero--font-weight: 700;
+
+  --text-display-hero-mobile: 36px;
+  --text-display-hero-mobile--line-height: 44px;
+  --text-display-hero-mobile--letter-spacing: -0.01em;
+  --text-display-hero-mobile--font-weight: 700;
+
+  --text-headline-lg: 40px;
+  --text-headline-lg--line-height: 48px;
+  --text-headline-lg--letter-spacing: -0.015em;
+  --text-headline-lg--font-weight: 600;
+
+  --text-headline-lg-mobile: 28px;
+  --text-headline-lg-mobile--line-height: 36px;
+  --text-headline-lg-mobile--letter-spacing: -0.01em;
+  --text-headline-lg-mobile--font-weight: 600;
+
+  --text-headline-md: 30px;
+  --text-headline-md--line-height: 38px;
+  --text-headline-md--font-weight: 600;
+
+  --text-headline-sm: 22px;
+  --text-headline-sm--line-height: 30px;
+  --text-headline-sm--font-weight: 600;
+
+  --text-metric-display: 44px;
+  --text-metric-display--line-height: 52px;
+  --text-metric-display--letter-spacing: -0.02em;
+  --text-metric-display--font-weight: 700;
+
+  --text-body-lg: 18px;
+  --text-body-lg--line-height: 28px;
+  --text-body-lg--font-weight: 400;
+
+  --text-body-md: 16px;
+  --text-body-md--line-height: 24px;
+  --text-body-md--font-weight: 400;
+
+  --text-body-sm: 14px;
+  --text-body-sm--line-height: 20px;
+  --text-body-sm--font-weight: 400;
+
+  --text-label-md: 14px;
+  --text-label-md--line-height: 20px;
+  --text-label-md--letter-spacing: 0.02em;
+  --text-label-md--font-weight: 600;
+
+  --text-label-caps: 12px;
+  --text-label-caps--line-height: 16px;
+  --text-label-caps--letter-spacing: 0.08em;
+  --text-label-caps--font-weight: 600;
+
+  /* ---- Named spacing (8px base, editorial cadence) ---- */
+  --spacing-space-xs: 0.25rem;
+  --spacing-space-sm: 0.5rem;
+  --spacing-space-md: 1rem;
+  --spacing-space-lg: 1.5rem;
+  --spacing-space-xl: 2.5rem;
+  --spacing-space-2xl: 4rem;
+  --spacing-space-3xl: 6rem;
+  --spacing-gutter: 1.5rem;
+  --spacing-gutter-desktop: 2.5rem;
+  --spacing-margin: 1rem;
+  --spacing-margin-tablet: 2rem;
+  --spacing-margin-desktop: 5rem;
 }
 
-/* Motion design tokens (Doc 06 §5) — consistent easing & timing everywhere */
-:root {
-  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
-  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
-  --dur-fast: 180ms;
-  --dur-base: 420ms;
-  --dur-slow: 800ms;
-  --reveal-shift: 20px;
-}
-
+/* ---------------- Base ---------------- */
 html {
   scroll-behavior: smooth;
 }
 
 body {
-  background: var(--color-cream);
-  color: var(--color-ink);
-  font-family: var(--font-sans);
+  background: var(--color-surface-cream);
+  color: var(--color-on-surface);
+  font-family: var(--font-body-md);
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
 }
 
-/* Headings default to the display serif (Playfair Display), forest green */
-h1, h2, h3, h4 {
-  font-family: var(--font-display);
-  font-weight: 600;
-  letter-spacing: -0.005em;
-  color: var(--color-forest-dark);
-}
-
 ::selection {
-  background: var(--color-moss);
-  color: #fff;
+  background: var(--color-primary-container);
+  color: var(--color-on-surface);
 }
 
-/* Reusable layout helper: centered content column with responsive padding */
+/* DESIGN.md typesetting rule: label-caps is ALWAYS rendered uppercase
+   (category tags, certification flags, numbered workflow milestones). */
+.font-label-caps {
+  text-transform: uppercase;
+}
+
+/* Material Symbols icon defaults */
+.material-symbols-outlined {
+  font-family: "Material Symbols Outlined";
+  font-weight: normal;
+  font-style: normal;
+  font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 24;
+  display: inline-block;
+  vertical-align: middle;
+  line-height: 1;
+  font-size: inherit;
+  letter-spacing: normal;
+  text-transform: none;
+  white-space: nowrap;
+  word-wrap: normal;
+  direction: ltr;
+  -webkit-font-feature-settings: "liga";
+  font-feature-settings: "liga";
+  -webkit-font-smoothing: antialiased;
+}
+.material-symbols-outlined.filled {
+  font-variation-settings: "FILL" 1, "wght" 400, "GRAD" 0, "opsz" 24;
+}
+
+/* ---------------- Elevation: warm, tactile (no cold greys) ---------------- */
+.shadow-ambient {
+  box-shadow: 0px 4px 16px -2px rgba(35, 17, 12, 0.05);
+}
+.shadow-lift {
+  box-shadow: 0px 12px 28px -4px rgba(35, 17, 12, 0.1);
+}
+.shadow-aura {
+  box-shadow: 0 8px 24px -2px rgba(252, 217, 1, 0.45);
+}
+.shadow-warm-aura {
+  box-shadow: 0 10px 30px -4px rgba(149, 72, 49, 0.25);
+}
+
+/* Hairline perimeter used across cards and section boundaries */
+.egg-border {
+  border: 1px solid rgba(127, 55, 33, 0.12);
+}
+
+/* Centred editorial container */
 .container-x {
   width: 100%;
-  max-width: var(--breakpoint-content);
+  max-width: 1320px;
   margin-inline: auto;
-  padding-inline: 1.25rem;
+  padding-inline: 1rem;
 }
-
-@media (min-width: 640px) {
+@media (min-width: 768px) {
   .container-x {
     padding-inline: 2rem;
   }
 }
+@media (min-width: 1024px) {
+  .container-x {
+    padding-inline: 2.5rem;
+  }
+}
 
-/* Scroll reveal — elements rise + fade as they enter the viewport.
-   The `.is-visible` class is added by RevealInit (IntersectionObserver).
-   For reduced-motion users the initial hidden state is never applied, so
-   content is always visible even if JS never runs. */
+/* ---------------- Ambient motion ---------------- */
+@keyframes sunriseGlow {
+  0%,
+  100% {
+    opacity: 0.35;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.65;
+    transform: scale(1.1);
+  }
+}
+@keyframes floatBadge {
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-6px);
+  }
+}
+@keyframes subtlePulse {
+  0%,
+  100% {
+    box-shadow: 0px 12px 28px -4px rgba(35, 17, 12, 0.12);
+  }
+  50% {
+    box-shadow: 0px 16px 36px 0px rgba(252, 217, 1, 0.28);
+  }
+}
+
+.animate-sunrise-glow {
+  animation: sunriseGlow 6s ease-in-out infinite;
+}
+.animate-float-badge {
+  animation: floatBadge 4.5s ease-in-out infinite;
+}
+.animate-badge-pulse {
+  animation: subtlePulse 3.5s ease-in-out infinite;
+}
+
+/* Scroll reveal — `is-visible` is added by RevealInit (IntersectionObserver).
+   Reduced-motion users never get the hidden state, so content always shows. */
 @media (prefers-reduced-motion: no-preference) {
   .reveal {
     opacity: 0;
-    transform: translateY(var(--reveal-shift));
+    transform: translateY(20px);
     transition:
-      opacity var(--dur-base) var(--ease-out),
-      transform var(--dur-base) var(--ease-out);
+      opacity 420ms cubic-bezier(0.22, 1, 0.36, 1),
+      transform 420ms cubic-bezier(0.22, 1, 0.36, 1);
     transition-delay: var(--reveal-delay, 0ms);
   }
   .reveal.is-visible {
@@ -121,99 +315,66 @@ h1, h2, h3, h4 {
   }
 }
 
-/* -------- Hero "morning at the farm" scene (SVG + CSS) -------- */
-@media (prefers-reduced-motion: no-preference) {
-  .hero-sun {
-    transform-box: fill-box;
-    transform-origin: center;
-    animation: sun-rise var(--dur-slow) var(--ease-out) both;
-  }
-  .hero-rays {
-    transform-box: fill-box;
-    transform-origin: center;
-    animation: rays-in 1200ms var(--ease-out) 200ms both, rays-spin 60s linear 1200ms infinite;
-  }
-  .hero-hen {
-    transform-box: fill-box;
-    transform-origin: bottom center;
-    animation: hen-settle 900ms var(--ease-out) 250ms both, hen-breathe 5s ease-in-out 1300ms infinite;
-  }
-  .hero-egg {
-    transform-box: fill-box;
-    transform-origin: center bottom;
-    opacity: 0;
-    animation: egg-settle 700ms var(--ease-out) both;
-  }
-  .hero-egg-1 { animation-delay: 750ms; }
-  .hero-egg-2 { animation-delay: 950ms; }
-  .hero-egg-3 { animation-delay: 1150ms; }
+/* ---------------- Volume slider (quote calculator) ---------------- */
+input[type="range"].custom-slider {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 8px;
+  border-radius: 9999px;
+  background: #412b25;
+  outline: none;
+}
+input[type="range"].custom-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: #fcd901;
+  cursor: pointer;
+  border: 3px solid #2d1b14;
+  box-shadow: 0 0 10px rgba(252, 217, 1, 0.6);
+  transition: transform 0.15s ease;
+}
+input[type="range"].custom-slider::-webkit-slider-thumb:hover {
+  transform: scale(1.15);
+}
+input[type="range"].custom-slider::-moz-range-thumb {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: #fcd901;
+  cursor: pointer;
+  border: 3px solid #2d1b14;
+  box-shadow: 0 0 10px rgba(252, 217, 1, 0.6);
+  transition: transform 0.15s ease;
 }
 
-@keyframes sun-rise {
-  from { transform: translateY(26px); opacity: 0; }
-  to { transform: translateY(0); opacity: 1; }
-}
-@keyframes rays-in {
-  from { opacity: 0; }
-  to { opacity: 0.5; }
-}
-@keyframes rays-spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
-}
-@keyframes hen-settle {
-  from { transform: translateY(-14px) scale(0.98); opacity: 0; }
-  to { transform: translateY(0) scale(1); opacity: 1; }
-}
-@keyframes hen-breathe {
-  0%, 100% { transform: translateY(0) scale(1); }
-  50% { transform: translateY(-1.5px) scale(1.012); }
-}
-@keyframes egg-settle {
-  0% { opacity: 0; transform: translateY(-16px) scale(0.9); }
-  60% { opacity: 1; transform: translateY(2px) scale(1.02); }
-  100% { opacity: 1; transform: translateY(0) scale(1); }
-}
-
-/* Signature flourish: an egg that gently wobbles once when scrolled into view */
-@media (prefers-reduced-motion: no-preference) {
-  .egg-wobble.is-visible {
-    transform-box: fill-box;
-    transform-origin: bottom center;
-    animation: egg-wobble 1600ms var(--ease-in-out) both;
-  }
-}
-@keyframes egg-wobble {
-  0%, 100% { transform: rotate(0deg); }
-  20% { transform: rotate(-7deg); }
-  45% { transform: rotate(5deg); }
-  70% { transform: rotate(-3deg); }
-  85% { transform: rotate(1.5deg); }
-}
-
-/* Rich-text article styling for blog posts (lexical output) */
+/* ---------------- Blog rich-text ---------------- */
 .prose-vardaan {
-  color: var(--color-ink);
+  color: var(--color-on-surface);
   line-height: 1.75;
   font-size: 1.05rem;
 }
 .prose-vardaan h2 {
-  font-family: var(--font-display);
-  font-size: 1.65rem;
+  font-family: var(--font-headline-md);
+  font-size: 30px;
+  line-height: 38px;
   margin: 2.2rem 0 0.75rem;
-  color: var(--color-forest-dark);
+  color: var(--color-on-surface);
 }
 .prose-vardaan h3 {
-  font-family: var(--font-display);
-  font-size: 1.3rem;
+  font-family: var(--font-headline-md);
+  font-size: 22px;
+  line-height: 30px;
   margin: 1.6rem 0 0.5rem;
-  color: var(--color-forest-dark);
+  color: var(--color-on-surface);
 }
 .prose-vardaan p {
   margin: 0 0 1.15rem;
 }
 .prose-vardaan a {
-  color: var(--color-forest);
+  color: var(--color-secondary);
   text-decoration: underline;
 }
 .prose-vardaan ul,
@@ -233,15 +394,22 @@ h1, h2, h3, h4 {
   font-weight: 600;
 }
 .prose-vardaan blockquote {
-  border-left: 3px solid var(--color-terracotta);
+  border-left: 3px solid var(--color-primary-container);
   padding-left: 1rem;
   margin: 1.25rem 0;
-  color: var(--color-stone);
+  color: var(--color-on-surface-variant);
 }
 
-/* Accessibility: honour reduced-motion globally (Doc 06 §7) */
+/* ---------------- Accessibility: honour reduced motion ---------------- */
 @media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after {
+  .animate-sunrise-glow,
+  .animate-float-badge,
+  .animate-badge-pulse {
+    animation: none !important;
+  }
+  *,
+  *::before,
+  *::after {
     animation-duration: 0.001ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.001ms !important;

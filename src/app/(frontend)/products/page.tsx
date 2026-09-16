@@ -77,7 +77,7 @@ export default async function ProductsPage() {
           className="mb-12"
         />
         {products.length === 0 ? (
-          <p className="rounded-2xl border border-dashed border-line bg-cream p-8 text-center text-stone">
+          <p className="rounded-2xl border border-dashed border-outline-variant bg-surface-cream p-8 text-center text-on-surface-variant">
             Product grades will appear here once added in the CMS.
           </p>
         ) : (
@@ -87,7 +87,7 @@ export default async function ProductsPage() {
               return (
                 <div
                   key={p.id}
-                  className="group flex flex-col overflow-hidden rounded-2xl border border-line bg-paper transition-shadow hover:shadow-md"
+                  className="group flex flex-col overflow-hidden rounded-2xl border border-outline-variant bg-surface-offwhite transition-shadow hover:shadow-md"
                 >
                   {media?.url ? (
                     // eslint-disable-next-line @next/next/no-img-element
@@ -101,7 +101,7 @@ export default async function ProductsPage() {
                   )}
                   <div className="flex flex-1 flex-col p-6">
                     {p.grade ? (
-                      <span className="text-xs font-semibold uppercase tracking-[0.16em] text-moss">
+                      <span className="text-xs font-semibold uppercase tracking-[0.16em] text-tertiary">
                         {p.grade}
                       </span>
                     ) : null}
@@ -111,7 +111,7 @@ export default async function ProductsPage() {
                         {p.packaging.map((pk, i) => (
                           <li
                             key={i}
-                            className="rounded-full bg-forest/8 px-3 py-1 text-xs font-medium text-forest-dark"
+                            className="rounded-full bg-secondary/8 px-3 py-1 text-xs font-medium text-on-surface"
                           >
                             {pk.format}
                             {pk.unit ? ` · ${pk.unit}` : ""}
@@ -120,7 +120,7 @@ export default async function ProductsPage() {
                       </ul>
                     ) : null}
                     {p.capacityNote ? (
-                      <p className="mt-3 flex-1 text-sm leading-relaxed text-stone">
+                      <p className="mt-3 flex-1 text-sm leading-relaxed text-on-surface-variant">
                         {p.capacityNote}
                       </p>
                     ) : (
@@ -143,7 +143,7 @@ export default async function ProductsPage() {
       </Section>
 
       {/* Supply & quality */}
-      <Section className="bg-paper/50">
+      <Section className="bg-surface-offwhite/50">
         <SectionHeading
           eyebrow="Freshness, quality & supply"
           title="Why businesses rely on our supply"
@@ -151,13 +151,13 @@ export default async function ProductsPage() {
         />
         <div className="grid gap-5 sm:grid-cols-2">
           {supplyPoints.map((s) => (
-            <div key={s.title} className="flex gap-4 rounded-2xl border border-line bg-cream p-6">
-              <span className="grid h-11 w-11 shrink-0 place-items-center rounded-full bg-forest/8 text-forest">
+            <div key={s.title} className="flex gap-4 rounded-2xl border border-outline-variant bg-surface-cream p-6">
+              <span className="grid h-11 w-11 shrink-0 place-items-center rounded-full bg-secondary/8 text-secondary">
                 {s.icon}
               </span>
               <div>
                 <h3 className="text-lg">{s.title}</h3>
-                <p className="mt-1 text-sm leading-relaxed text-stone">{s.body}</p>
+                <p className="mt-1 text-sm leading-relaxed text-on-surface-variant">{s.body}</p>
               </div>
             </div>
           ))}

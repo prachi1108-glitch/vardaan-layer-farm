@@ -3,119 +3,98 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
-import { Logo } from "@/components/Logo";
-import { ButtonLink } from "@/components/ui/Button";
-import { nav, enquiryHref } from "@/lib/site";
+import { Sym } from "@/components/ui/Sym";
+import { nav, enquiryHref, site } from "@/lib/site";
 
 export function Header() {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
-  const [scrolled, setScrolled] = useState(false);
 
-  useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 12);
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
-
-  // Close mobile menu on route change.
+  // Close the mobile menu on navigation.
   useEffect(() => setOpen(false), [pathname]);
 
-  return (
-    <header
-      className={`sticky top-0 z-50 transition-colors duration-300 ${
-        scrolled || open
-          ? "bg-cream/90 backdrop-blur border-b border-line"
-          : "bg-transparent border-b border-transparent"
-      }`}
-    >
-      <div className="container-x flex h-16 items-center justify-between gap-4 sm:h-20">
-        <Logo />
+  const isActive = (href: string) =>
+    href === "/" ? pathname === "/" : pathname.startsWith(href);
 
-        <nav className="hidden items-center gap-1 lg:flex" aria-label="Primary">
-          {nav.map((item) => {
-            const active =
-              item.href === "/"
-                ? pathname === "/"
-                : pathname.startsWith(item.href);
-            return (
-              <Link
-                key={item.href}
-                href={item.href}
-                className={`rounded-full px-4 py-2 text-sm font-medium transition-colors ${
-                  active
-                    ? "text-forest-dark"
-                    : "text-stone hover:text-forest-dark"
-                }`}
-              >
-                {item.label}
-                {active ? (
-                  <span className="mx-auto mt-1 block h-0.5 w-4 rounded-full bg-terracotta" />
-                ) : null}
-              </Link>
-            );
-          })}
+  return (
+    <header className="bg-surface-offwhite border-b border-outline-variant/30 sticky top-0 z-50 shadow-ambient">
+      <div className="container-x flex items-center justify-between py-4">
+        {/* Brand */}
+        <Link className="flex items-center gap-3 group" href="/">
+          <span className="w-10 h-10 rounded-full bg-primary-container flex items-center justify-center text-on-surface shadow-sm transition-transform duration-200 group-hover:scale-105">
+            <Sym name="egg" filled />
+          </span>
+          <span className="flex flex-col">
+            <span className="font-headline-sm text-headline-sm text-on-surface font-bold tracking-tight leading-tight">
+              {site.name}
+            </span>
+            <span className="font-label-caps text-label-caps text-secondary tracking-widest">
+              BULK POULTRY &amp; EGG SUPPLY
+            </span>
+          </span>
+        </Link>
+
+        {/* Desktop nav */}
+        <nav className="hidden md:flex items-center gap-8" aria-label="Primary">
+          {nav.map((item) => (
+            <Link
+              key={item.href}
+              href={item.href}
+              aria-current={isActive(item.href) ? "page" : undefined}
+              className={
+                isActive(item.href)
+                  ? "text-primary font-bold border-b-2 border-primary-container pb-1 transition-colors duration-200"
+                  : "text-on-surface-variant font-medium pb-1 border-b-2 border-transparent hover:text-primary transition-colors duration-200"
+              }
+            >
+              {item.label}
+            </Link>
+          ))}
         </nav>
 
-        <div className="hidden lg:block">
-          <ButtonLink href={enquiryHref} size="md">
+        {/* Trailing action */}
+        <div className="flex items-center gap-4">
+          <Link
+            className="hidden sm:inline-flex items-center justify-center bg-primary-container text-on-surface font-label-md text-label-md font-bold px-space-lg py-3 rounded-lg shadow-ambient hover:-translate-y-0.5 hover:shadow-aura active:scale-95 transition-all duration-200"
+            href={enquiryHref}
+          >
             Get a Quote
-          </ButtonLink>
+          </Link>
+          <button
+            aria-label={open ? "Close navigation menu" : "Open navigation menu"}
+            aria-expanded={open}
+            className="md:hidden p-2 rounded-lg text-on-surface hover:bg-surface-cream transition-colors"
+            type="button"
+            onClick={() => setOpen((v) => !v)}
+          >
+            <Sym name={open ? "close" : "menu"} />
+          </button>
         </div>
-
-        {/* Mobile toggle */}
-        <button
-          type="button"
-          className="grid h-10 w-10 place-items-center rounded-full text-forest-dark hover:bg-forest/5 lg:hidden"
-          aria-label={open ? "Close menu" : "Open menu"}
-          aria-expanded={open}
-          onClick={() => setOpen((v) => !v)}
-        >
-          <span className="relative block h-4 w-5">
-            <span
-              className={`absolute left-0 h-0.5 w-5 bg-current transition-all ${
-                open ? "top-1.5 rotate-45" : "top-0"
-              }`}
-            />
-            <span
-              className={`absolute left-0 top-1.5 h-0.5 w-5 bg-current transition-opacity ${
-                open ? "opacity-0" : "opacity-100"
-              }`}
-            />
-            <span
-              className={`absolute left-0 h-0.5 w-5 bg-current transition-all ${
-                open ? "top-1.5 -rotate-45" : "top-3"
-              }`}
-            />
-          </span>
-        </button>
       </div>
 
       {/* Mobile menu */}
       {open ? (
-        <div className="border-t border-line bg-cream lg:hidden">
-          <nav className="container-x flex flex-col py-4" aria-label="Mobile">
-            {nav.map((item) => {
-              const active =
-                item.href === "/"
-                  ? pathname === "/"
-                  : pathname.startsWith(item.href);
-              return (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  className={`rounded-lg px-3 py-3 text-base font-medium ${
-                    active ? "bg-forest/5 text-forest-dark" : "text-stone"
-                  }`}
-                >
-                  {item.label}
-                </Link>
-              );
-            })}
-            <ButtonLink href={enquiryHref} size="lg" className="mt-3">
+        <div className="md:hidden border-t border-outline-variant/30 bg-surface-offwhite">
+          <nav className="container-x flex flex-col py-3" aria-label="Mobile">
+            {nav.map((item) => (
+              <Link
+                key={item.href}
+                href={item.href}
+                className={`rounded-lg px-3 py-3 font-label-md text-label-md ${
+                  isActive(item.href)
+                    ? "bg-surface-cream text-primary font-bold"
+                    : "text-on-surface-variant"
+                }`}
+              >
+                {item.label}
+              </Link>
+            ))}
+            <Link
+              href={enquiryHref}
+              className="mt-2 inline-flex items-center justify-center bg-primary-container text-on-surface font-label-md text-label-md font-bold px-space-lg py-3 rounded-lg shadow-ambient"
+            >
               Get a Quote
-            </ButtonLink>
+            </Link>
           </nav>
         </div>
       ) : null}

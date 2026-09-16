@@ -1,28 +1,31 @@
 import Link from "next/link";
 import type { ComponentProps, ReactNode } from "react";
 
-type Variant = "primary" | "secondary" | "solid" | "ghost" | "light";
+type Variant = "primary" | "secondary" | "outline" | "ghost" | "light";
 type Size = "md" | "lg";
 
 const base =
-  "inline-flex items-center justify-center gap-2 rounded-full font-medium tracking-tight transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-cream focus-visible:ring-forest disabled:opacity-60 disabled:pointer-events-none";
+  "inline-flex items-center justify-center gap-2 rounded-lg font-label-md text-label-md transition-all duration-200 active:scale-95 focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-primary-container/50 disabled:opacity-60 disabled:pointer-events-none";
 
 const variants: Record<Variant, string> = {
-  // Primary CTA — GOLD background, dark forest-green text (Doc 03 §3).
-  // The highest-attention element; reserve for "Enquire / Get a Quote".
-  primary: "bg-terracotta text-forest-deep hover:bg-wheat shadow-sm hover:shadow-md",
-  // Secondary — green outline on cream (used for lower-priority actions).
+  /** Primary action (quote / enquire) — yellow with deep-brown text. */
+  primary:
+    "bg-primary-container text-on-surface font-bold hover:-translate-y-0.5 hover:shadow-aura shadow-ambient",
+  /** Secondary — filled earthy brown. */
   secondary:
-    "bg-transparent text-forest-dark ring-1 ring-inset ring-forest/30 hover:bg-forest/5",
-  // Solid forest-green button, cream text.
-  solid: "bg-forest text-cream hover:bg-forest-dark",
-  ghost: "bg-transparent text-forest-dark hover:bg-forest/5",
-  light: "bg-cream text-forest-dark hover:bg-white",
+    "bg-secondary text-surface-cream hover:bg-on-secondary-container hover:-translate-y-0.5 hover:shadow-warm-aura",
+  /** Tertiary — outlined earthy brown. */
+  outline:
+    "bg-transparent text-secondary border-[1.5px] border-secondary hover:bg-secondary hover:text-surface-cream hover:-translate-y-0.5 hover:shadow-warm-aura",
+  ghost: "bg-transparent text-secondary hover:bg-surface-container/60",
+  /** For use on dark bands. */
+  light:
+    "bg-surface-cream text-on-surface font-semibold hover:bg-pure-white hover:-translate-y-0.5",
 };
 
 const sizes: Record<Size, string> = {
-  md: "px-5 py-2.5 text-sm",
-  lg: "px-7 py-3.5 text-base",
+  md: "px-space-lg py-3",
+  lg: "px-space-xl py-3.5",
 };
 
 function classes(variant: Variant, size: Size, extra?: string) {
@@ -43,7 +46,10 @@ export function ButtonLink({
   className,
   children,
   ...rest
-}: CommonProps & { href: string } & Omit<ComponentProps<typeof Link>, "href" | "className">) {
+}: CommonProps & { href: string } & Omit<
+    ComponentProps<typeof Link>,
+    "href" | "className"
+  >) {
   const external = /^https?:|^tel:|^mailto:/.test(href);
   if (external) {
     return (

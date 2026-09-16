@@ -74,7 +74,7 @@ export default function AboutPage() {
                 </>
               }
             />
-            <p className="mt-5 max-w-xl leading-relaxed text-stone">
+            <p className="mt-5 max-w-xl leading-relaxed text-on-surface-variant">
               This page is written to be filled with the farm&apos;s real
               history — how it started, the family and people behind it, and how
               it has grown. Placeholder lines are marked so the true story can
@@ -90,24 +90,24 @@ export default function AboutPage() {
       </Section>
 
       {/* Our Journey — timeline */}
-      <Section className="bg-paper/50">
+      <Section className="bg-surface-offwhite/50">
         <SectionHeading
           eyebrow="Our journey"
           title="Milestones that shaped the farm."
           intro="Only genuine milestones belong here — the markers below are placeholders to be confirmed."
           className="mb-14"
         />
-        <ol className="relative space-y-8 border-l border-line pl-8">
+        <ol className="relative space-y-8 border-l border-outline-variant pl-8">
           {timeline.map((m) => (
             <li key={m.year} className="relative">
-              <span className="absolute -left-[2.35rem] top-1 grid h-6 w-6 place-items-center rounded-full border border-line bg-cream">
-                <span className="h-2 w-2 rounded-full bg-terracotta" />
+              <span className="absolute -left-[2.35rem] top-1 grid h-6 w-6 place-items-center rounded-full border border-outline-variant bg-surface-cream">
+                <span className="h-2 w-2 rounded-full bg-secondary" />
               </span>
-              <span className="text-xs font-semibold uppercase tracking-[0.16em] text-moss">
+              <span className="text-xs font-semibold uppercase tracking-[0.16em] text-tertiary">
                 {m.year}
               </span>
               <h3 className="mt-1 text-xl">{m.title}</h3>
-              <p className="mt-1 max-w-xl text-sm leading-relaxed text-stone">
+              <p className="mt-1 max-w-xl text-sm leading-relaxed text-on-surface-variant">
                 {m.body}
               </p>
             </li>
@@ -136,12 +136,12 @@ export default function AboutPage() {
       </Section>
 
       {/* From Chick to Layer */}
-      <Section className="bg-forest-deep text-cream">
+      <Section className="bg-on-surface text-surface-cream">
         <SectionHeading
           eyebrow="From chick to layer"
-          title={<span className="text-cream">The bird&apos;s journey.</span>}
+          title={<span className="text-surface-cream">The bird&apos;s journey.</span>}
           intro={
-            <span className="text-cream/70">
+            <span className="text-surface-cream/70">
               A closer look at how our birds move from chicks to productive laying
               hens — described plainly, without unsupported health or welfare
               claims.
@@ -151,19 +151,19 @@ export default function AboutPage() {
         />
         <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
           {layerStages.map((s) => (
-            <div key={s.n} className="rounded-2xl border border-cream/15 bg-cream/[0.04] p-6">
-              <span className="text-xs font-semibold uppercase tracking-[0.16em] text-wheat">
+            <div key={s.n} className="rounded-2xl border border-surface-cream/15 bg-surface-cream/[0.04] p-6">
+              <span className="text-xs font-semibold uppercase tracking-[0.16em] text-accent-gold">
                 {s.n}
               </span>
-              <h3 className="mt-2 text-lg text-cream">{s.title}</h3>
-              <p className="mt-1.5 text-sm leading-relaxed text-cream/70">{s.body}</p>
+              <h3 className="mt-2 text-lg text-surface-cream">{s.title}</h3>
+              <p className="mt-1.5 text-sm leading-relaxed text-surface-cream/70">{s.body}</p>
             </div>
           ))}
         </div>
       </Section>
 
       {/* Farm Practices */}
-      <Section className="bg-paper/50">
+      <Section className="bg-surface-offwhite/50">
         <SectionHeading
           eyebrow="Farm practices"
           title="How the day-to-day is run."
@@ -172,13 +172,13 @@ export default function AboutPage() {
         />
         <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {practices.map((p) => (
-            <div key={p.title} className="flex gap-4 rounded-2xl border border-line bg-cream p-6">
-              <span className="grid h-11 w-11 shrink-0 place-items-center rounded-full bg-forest/8 text-forest">
+            <div key={p.title} className="flex gap-4 rounded-2xl border border-outline-variant bg-surface-cream p-6">
+              <span className="grid h-11 w-11 shrink-0 place-items-center rounded-full bg-secondary/8 text-secondary">
                 {p.icon}
               </span>
               <div>
                 <h3 className="text-lg">{p.title}</h3>
-                <p className="mt-1 text-sm leading-relaxed text-stone">{p.body}</p>
+                <p className="mt-1 text-sm leading-relaxed text-on-surface-variant">{p.body}</p>
               </div>
             </div>
           ))}

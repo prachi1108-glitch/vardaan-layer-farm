@@ -53,7 +53,7 @@ export default async function BlogIndexPage() {
 
       <Section>
         {posts.length === 0 ? (
-          <p className="rounded-2xl border border-dashed border-line bg-cream p-8 text-center text-stone">
+          <p className="rounded-2xl border border-dashed border-outline-variant bg-surface-cream p-8 text-center text-on-surface-variant">
             No posts published yet. Add posts in the CMS and they&apos;ll appear here.
           </p>
         ) : (
@@ -71,7 +71,7 @@ export default async function BlogIndexPage() {
                 <Link
                   key={post.id}
                   href={`/blog/${post.slug}`}
-                  className="group flex flex-col overflow-hidden rounded-2xl border border-line bg-paper transition-shadow hover:shadow-md"
+                  className="group flex flex-col overflow-hidden rounded-2xl border border-outline-variant bg-surface-offwhite transition-shadow hover:shadow-md"
                 >
                   {media?.url ? (
                     // eslint-disable-next-line @next/next/no-img-element
@@ -84,20 +84,20 @@ export default async function BlogIndexPage() {
                     <ImagePlaceholder label={post.title} tone="forest" className="aspect-[16/10] w-full" />
                   )}
                   <div className="flex flex-1 flex-col p-6">
-                    <div className="flex items-center gap-2 text-xs uppercase tracking-wide text-moss">
+                    <div className="flex items-center gap-2 text-xs uppercase tracking-wide text-tertiary">
                       {category?.title ? <span>{category.title}</span> : null}
                       {category?.title && post.publishedAt ? <span>·</span> : null}
                       {post.publishedAt ? <span>{formatDate(post.publishedAt)}</span> : null}
                     </div>
                     <h3 className="mt-2 text-lg leading-snug">{post.title}</h3>
                     {post.excerpt ? (
-                      <p className="mt-2 flex-1 text-sm leading-relaxed text-stone">
+                      <p className="mt-2 flex-1 text-sm leading-relaxed text-on-surface-variant">
                         {post.excerpt}
                       </p>
                     ) : (
                       <div className="flex-1" />
                     )}
-                    <span className="mt-4 text-sm font-semibold text-forest">
+                    <span className="mt-4 text-sm font-semibold text-secondary">
                       Read more →
                     </span>
                   </div>

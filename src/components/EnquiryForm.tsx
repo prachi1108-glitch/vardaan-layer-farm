@@ -32,8 +32,10 @@ const FREQUENCIES = [
   { value: "ongoing", label: "Ongoing" },
 ] as const;
 
+/* Form inputs per DESIGN.md: off-white fill, 25%-opacity earthy-brown border,
+   8px radius, focus = 1.5px brown border + 3px yellow glow ring. */
 const fieldCls =
-  "w-full rounded-xl border border-line bg-paper px-4 py-3 text-sm text-ink placeholder:text-stone/60 focus:border-forest focus:outline-none focus:ring-2 focus:ring-forest/20";
+  "w-full rounded-lg border border-secondary/25 bg-surface-offwhite px-4 py-3 font-body-sm text-body-sm text-on-surface placeholder:text-on-surface-variant/50 focus:outline-none focus:border-secondary focus:ring-[3px] focus:ring-primary-container/30 transition-all";
 
 function LabelWrap({
   label,
@@ -48,9 +50,9 @@ function LabelWrap({
 }) {
   return (
     <label className={`flex flex-col gap-1.5 ${full ? "sm:col-span-2" : ""}`}>
-      <span className="text-sm font-medium text-forest-dark">
+      <span className="font-label-md text-label-md text-on-surface">
         {label}
-        {required ? <span className="text-terracotta"> *</span> : null}
+        {required ? <span className="text-secondary"> *</span> : null}
       </span>
       {children}
     </label>
@@ -99,12 +101,12 @@ export function EnquiryForm({ whatsappHref }: { whatsappHref?: string } = {}) {
 
   if (status === "done") {
     return (
-      <div className="rounded-2xl border border-moss/40 bg-mist p-8 text-center">
-        <span className="mx-auto grid h-14 w-14 place-items-center rounded-full bg-moss text-cream">
+      <div className="rounded-2xl border border-tertiary/40 bg-tertiary-container p-8 text-center">
+        <span className="mx-auto grid h-14 w-14 place-items-center rounded-full bg-tertiary text-surface-cream">
           <Icon.Check className="h-7 w-7" />
         </span>
         <h3 className="mt-4 text-2xl">Thank you — we&apos;ve got your enquiry.</h3>
-        <p className="mx-auto mt-2 max-w-md text-stone">
+        <p className="mx-auto mt-2 max-w-md text-on-surface-variant">
           Our team will review your requirement and get back to you with a quote.
           For anything urgent, reach us on WhatsApp or call.
         </p>
@@ -119,7 +121,7 @@ export function EnquiryForm({ whatsappHref }: { whatsappHref?: string } = {}) {
           </a>
           <button
             onClick={() => setStatus("idle")}
-            className="rounded-full px-5 py-2.5 text-sm font-semibold text-forest hover:bg-forest/5"
+            className="rounded-full px-5 py-2.5 text-sm font-semibold text-secondary hover:bg-secondary/5"
           >
             Submit another enquiry
           </button>
@@ -132,7 +134,7 @@ export function EnquiryForm({ whatsappHref }: { whatsappHref?: string } = {}) {
     <form
       ref={formRef}
       onSubmit={onSubmit}
-      className="rounded-2xl border border-line bg-cream p-6 sm:p-8"
+      className="rounded-2xl border border-outline-variant bg-surface-cream p-6 sm:p-8"
     >
       {/* Honeypot — hidden from real users; bots that fill it are rejected. */}
       <div className="absolute left-[-9999px]" aria-hidden>
@@ -245,7 +247,7 @@ export function EnquiryForm({ whatsappHref }: { whatsappHref?: string } = {}) {
       </div>
 
       {status === "error" ? (
-        <p className="mt-4 rounded-xl bg-rooster/10 px-4 py-3 text-sm text-rooster">
+        <p className="mt-4 rounded-xl bg-error/10 px-4 py-3 text-sm text-error">
           {errorMsg || "Something went wrong sending your enquiry."} Please try
           again, or reach us directly on WhatsApp / phone.
         </p>
@@ -259,12 +261,12 @@ export function EnquiryForm({ whatsappHref }: { whatsappHref?: string } = {}) {
           href={waHref}
           target="_blank"
           rel="noopener noreferrer"
-          className="inline-flex items-center justify-center gap-2 rounded-full px-5 py-3.5 text-sm font-semibold text-forest hover:bg-forest/5"
+          className="inline-flex items-center justify-center gap-2 rounded-full px-5 py-3.5 text-sm font-semibold text-secondary hover:bg-secondary/5"
         >
           Prefer WhatsApp? Message us
         </a>
       </div>
-      <p className="mt-3 text-xs text-stone">
+      <p className="mt-3 text-xs text-on-surface-variant">
         We&apos;ll only use your details to respond to this enquiry.
       </p>
     </form>

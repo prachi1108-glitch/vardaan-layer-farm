@@ -13,27 +13,23 @@ export function PageHero({
   children?: ReactNode;
 }) {
   return (
-    <section className="relative overflow-hidden border-b border-line bg-cream-deep">
+    <section className="relative overflow-hidden border-b egg-border bg-surface-cream">
       <div
-        aria-hidden
-        className="absolute inset-0 -z-10 opacity-[0.5]"
-        style={{
-          backgroundImage:
-            "radial-gradient(circle at 85% 0%, rgba(95,127,82,0.18), transparent 45%)",
-        }}
+        aria-hidden="true"
+        className="absolute top-0 right-0 w-[500px] h-[500px] rounded-full bg-gradient-to-br from-primary-container/25 via-secondary/10 to-transparent blur-3xl pointer-events-none animate-sunrise-glow"
       />
-      <div className="container-x py-14 sm:py-20">
+      <div className="container-x py-space-2xl md:py-space-3xl relative z-10">
         <div className="reveal max-w-3xl">
           <Eyebrow>{eyebrow}</Eyebrow>
-          <h1 className="mt-5 text-4xl leading-[1.05] sm:text-5xl lg:text-[3.4rem]">
+          <h1 className="mt-3 font-display-hero text-display-hero-mobile md:text-display-hero text-on-surface font-bold tracking-tight">
             {title}
           </h1>
           {intro ? (
-            <p className="mt-5 max-w-2xl text-lg leading-relaxed text-stone">
+            <p className="mt-5 max-w-2xl font-body-lg text-body-lg text-on-surface-variant">
               {intro}
             </p>
           ) : null}
-          {children ? <div className="mt-8">{children}</div> : null}
+          {children ? <div className="mt-8 flex flex-wrap gap-4">{children}</div> : null}
         </div>
       </div>
     </section>

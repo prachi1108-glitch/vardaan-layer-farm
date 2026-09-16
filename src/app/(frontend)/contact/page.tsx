@@ -58,15 +58,15 @@ export default async function ContactPage() {
             <ul className="space-y-3">
               {methods.map((m) => {
                 const inner = (
-                  <div className="flex items-center gap-4 rounded-2xl border border-line bg-paper p-5">
-                    <span className="grid h-11 w-11 shrink-0 place-items-center rounded-full bg-forest/8 text-forest">
+                  <div className="flex items-center gap-4 rounded-2xl border border-outline-variant bg-surface-offwhite p-5">
+                    <span className="grid h-11 w-11 shrink-0 place-items-center rounded-full bg-secondary/8 text-secondary">
                       {m.icon}
                     </span>
                     <div>
-                      <div className="text-xs uppercase tracking-wide text-stone">
+                      <div className="text-xs uppercase tracking-wide text-on-surface-variant">
                         {m.title}
                       </div>
-                      <div className="text-sm font-medium text-forest-dark">{m.value}</div>
+                      <div className="text-sm font-medium text-on-surface">{m.value}</div>
                     </div>
                   </div>
                 );
@@ -91,7 +91,7 @@ export default async function ContactPage() {
 
             <div className="mt-4">
               {contact.mapEmbedUrl ? (
-                <div className="overflow-hidden rounded-2xl border border-line">
+                <div className="overflow-hidden rounded-2xl border border-outline-variant">
                   <iframe
                     src={contact.mapEmbedUrl}
                     title="Farm location map"
@@ -101,13 +101,13 @@ export default async function ContactPage() {
                   />
                 </div>
               ) : (
-                <div className="rounded-2xl border border-dashed border-line bg-cream p-5 text-sm text-stone">
-                  <div className="flex items-center gap-2 font-medium text-forest-dark">
+                <div className="rounded-2xl border border-dashed border-outline-variant bg-surface-cream p-5 text-sm text-on-surface-variant">
+                  <div className="flex items-center gap-2 font-medium text-on-surface">
                     <Icon.Pin className="h-5 w-5" /> Map
                   </div>
                   <p className="mt-1">
                     Add a Google Maps embed URL in{" "}
-                    <code className="rounded bg-sand px-1">Site Settings</code> (in
+                    <code className="rounded bg-surface-container-high px-1">Site Settings</code> (in
                     /admin) to show the farm location here.
                   </p>
                 </div>
