@@ -275,7 +275,7 @@ body {
     transform: translateY(0px);
   }
   50% {
-    transform: translateY(-6px);
+    transform: translateY(-7px);
   }
 }
 @keyframes subtlePulse {
@@ -284,7 +284,55 @@ body {
     box-shadow: 0px 12px 28px -4px rgba(35, 17, 12, 0.12);
   }
   50% {
-    box-shadow: 0px 16px 36px 0px rgba(252, 217, 1, 0.28);
+    box-shadow: 0px 16px 36px 0px rgba(252, 217, 1, 0.32);
+  }
+}
+@keyframes heroCardPulse {
+  0%,
+  100% {
+    box-shadow:
+      0px 12px 28px -4px rgba(35, 17, 12, 0.12),
+      0 0 0 1px rgba(252, 217, 1, 0.15);
+  }
+  50% {
+    box-shadow:
+      0px 18px 42px -4px rgba(149, 72, 49, 0.22),
+      0 0 24px 2px rgba(252, 217, 1, 0.35);
+  }
+}
+@keyframes floatParticle {
+  0% {
+    transform: translateY(0px) translateX(0px) rotate(0deg);
+    opacity: 0;
+  }
+  20% {
+    opacity: 0.7;
+  }
+  80% {
+    opacity: 0.55;
+  }
+  100% {
+    transform: translateY(-130px) translateX(25px) rotate(45deg);
+    opacity: 0;
+  }
+}
+@keyframes subtleShimmer {
+  0% {
+    transform: translateX(-150%) skewX(-20deg);
+  }
+  40%,
+  100% {
+    transform: translateX(200%) skewX(-20deg);
+  }
+}
+@keyframes fadeInUp {
+  0% {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 
@@ -296,6 +344,54 @@ body {
 }
 .animate-badge-pulse {
   animation: subtlePulse 3.5s ease-in-out infinite;
+}
+.animate-hero-card {
+  animation: heroCardPulse 5s ease-in-out infinite;
+}
+
+/* Hero staggered entrance (starts hidden, animates in on load) */
+.hero-enter-1,
+.hero-enter-2,
+.hero-enter-3,
+.hero-enter-4 {
+  opacity: 0;
+}
+.hero-enter-1 {
+  animation: fadeInUp 0.75s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+.hero-enter-2 {
+  animation: fadeInUp 0.85s cubic-bezier(0.16, 1, 0.3, 1) 0.12s forwards;
+}
+.hero-enter-3 {
+  animation: fadeInUp 0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.22s forwards;
+}
+.hero-enter-4 {
+  animation: fadeInUp 0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.32s forwards;
+}
+
+/* Light sweep across primary CTAs */
+.cta-shimmer-btn {
+  position: relative;
+  overflow: hidden;
+}
+.cta-shimmer-btn::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 60%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.45), transparent);
+  animation: subtleShimmer 4s ease-in-out infinite;
+  pointer-events: none;
+}
+
+/* Floating golden chaff / pollen particles in the hero */
+.dust-particle {
+  position: absolute;
+  border-radius: 9999px;
+  pointer-events: none;
+  animation: floatParticle linear infinite;
 }
 
 /* Scroll reveal — `is-visible` is added by RevealInit (IntersectionObserver).
@@ -404,7 +500,21 @@ input[type="range"].custom-slider::-moz-range-thumb {
 @media (prefers-reduced-motion: reduce) {
   .animate-sunrise-glow,
   .animate-float-badge,
-  .animate-badge-pulse {
+  .animate-badge-pulse,
+  .animate-hero-card,
+  .dust-particle,
+  .cta-shimmer-btn::after {
+    animation: none !important;
+  }
+  .dust-particle {
+    display: none;
+  }
+  .hero-enter-1,
+  .hero-enter-2,
+  .hero-enter-3,
+  .hero-enter-4 {
+    opacity: 1 !important;
+    transform: none !important;
     animation: none !important;
   }
   *,

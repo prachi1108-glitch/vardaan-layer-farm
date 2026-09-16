@@ -55,7 +55,7 @@ export function Header() {
         {/* Trailing action */}
         <div className="flex items-center gap-4">
           <Link
-            className="hidden sm:inline-flex items-center justify-center bg-primary-container text-on-surface font-label-md text-label-md font-bold px-space-lg py-3 rounded-lg shadow-ambient hover:-translate-y-0.5 hover:shadow-aura active:scale-95 transition-all duration-200"
+            className="cta-shimmer-btn hidden sm:inline-flex items-center justify-center bg-primary-container text-on-surface font-label-md text-label-md font-bold px-space-lg py-3 rounded-lg shadow-ambient hover:-translate-y-0.5 hover:shadow-aura active:scale-95 transition-all duration-200"
             href={enquiryHref}
           >
             Get a Quote
