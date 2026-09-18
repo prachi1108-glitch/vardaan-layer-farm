@@ -50,8 +50,8 @@ export function FarmFresh() {
             <div className="relative p-6 sm:p-8 bg-primary-container rounded-[36px] shadow-lift">
               <div className="relative h-[440px] w-full rounded-[24px] overflow-hidden bg-surface-dark-card">
                 <Image
-                  src="/design/farm-interior.jpg"
-                  alt="Interior of a modern commercial layer house with automated egg collection conveyors and bright natural ventilation"
+                  src="/design/layer-house-interior.jpg"
+                  alt="Interior of Vardaan's layer house: a long central aisle flanked by multi-tier cage rows of white laying hens, with rows of fresh white eggs in the collection channels"
                   fill
                   sizes="(max-width: 1024px) 100vw, 40vw"
                   className="object-cover"
