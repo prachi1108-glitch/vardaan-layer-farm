@@ -25,15 +25,22 @@ const designStats: TrustStatItem[] = [
 export default async function HomePage() {
   const home = await getHomeContent();
 
-  const payload = await getPayloadClient();
-  const { docs } = await payload.find({
-    collection: "posts",
-    where: { _status: { equals: "published" } },
-    sort: "-publishedAt",
-    depth: 1,
-    limit: 3,
-  });
-  const posts = docs as unknown as InsightPost[];
+  // A CMS/database blip must not take the homepage down — the Insights section
+  // simply hides itself when there are no posts to show.
+  let posts: InsightPost[] = [];
+  try {
+    const payload = await getPayloadClient();
+    const { docs } = await payload.find({
+      collection: "posts",
+      where: { _status: { equals: "published" } },
+      sort: "-publishedAt",
+      depth: 1,
+      limit: 3,
+    });
+    posts = docs as unknown as InsightPost[];
+  } catch (err) {
+    console.error("[home] could not load posts:", err);
+  }
 
   const stats: TrustStatItem[] =
     home?.trustStats && home.trustStats.length > 0

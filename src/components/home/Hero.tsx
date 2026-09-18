@@ -121,8 +121,8 @@ export function Hero({
               <div className="relative rounded-[28px] overflow-hidden egg-border shadow-lift bg-surface-offwhite/95 backdrop-blur-sm p-3 animate-hero-card">
                 <div className="relative h-[420px] md:h-[500px] w-full rounded-[22px] overflow-hidden">
                   <Image
-                    src="/design/hero-trays.jpg"
-                    alt="Stacked 30-egg wholesale pulp trays ready for dispatch at Vardaan Layer Farm"
+                    src="/design/hero-egg-trays.jpg"
+                    alt="Stacked 30-egg pulp trays of fresh white eggs on a timber bench in Vardaan Layer Farm's packing hall, with further stacks and a worker behind"
                     fill
                     priority
                     sizes="(max-width: 1024px) 100vw, 50vw"
