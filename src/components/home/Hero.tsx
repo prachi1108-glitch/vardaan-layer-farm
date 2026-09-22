@@ -1,5 +1,4 @@
 import Image from "next/image";
-import Link from "next/link";
 import { Sym } from "@/components/ui/Sym";
 import { HeroShader } from "@/components/home/HeroShader";
 
@@ -21,14 +20,10 @@ export function Hero({
   eyebrow,
   heading,
   subheading,
-  ctaPrimary,
-  ctaSecondary,
 }: {
   eyebrow: string;
   heading: string;
   subheading: string;
-  ctaPrimary: { label: string; href: string };
-  ctaSecondary: { label: string; href: string };
 }) {
   return (
     <section
@@ -78,30 +73,7 @@ export function Hero({
               {subheading}
             </p>
 
-            <div className="hero-enter-4 flex flex-col sm:flex-row items-stretch sm:items-center gap-4 pt-2">
-              <Link
-                className="cta-shimmer-btn group inline-flex items-center justify-center gap-2 bg-primary-container text-on-surface font-label-md text-label-md font-bold px-space-lg py-3.5 rounded-lg hover:-translate-y-1 hover:shadow-aura active:scale-95 transition-all duration-200"
-                href={ctaPrimary.href}
-              >
-                <span>{ctaPrimary.label}</span>
-                <Sym
-                  name="arrow_forward"
-                  className="text-base transition-transform duration-200 group-hover:translate-x-1"
-                />
-              </Link>
-              <Link
-                className="group inline-flex items-center justify-center gap-2 bg-surface-offwhite/80 backdrop-blur-sm text-secondary border-[1.5px] border-secondary font-label-md text-label-md px-space-lg py-3 rounded-lg hover:bg-secondary hover:text-surface-cream hover:-translate-y-0.5 hover:shadow-warm-aura active:scale-95 transition-all duration-200"
-                href={ctaSecondary.href}
-              >
-                <span>{ctaSecondary.label}</span>
-                <Sym
-                  name="north_east"
-                  className="text-base transition-transform duration-200 group-hover:rotate-45"
-                />
-              </Link>
-            </div>
-
-            <div className="hero-enter-4 pt-4 flex flex-wrap items-center gap-x-6 gap-y-2 text-on-surface-variant font-label-md text-label-md">
+            <div className="hero-enter-4 pt-2 flex flex-wrap items-center gap-x-6 gap-y-2 text-on-surface-variant font-label-md text-label-md">
               {microTrust.map((t) => (
                 <div key={t} className="flex items-center gap-2">
                   <Sym name="check_circle" filled className="text-tertiary" />

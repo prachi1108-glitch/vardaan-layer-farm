@@ -59,14 +59,6 @@ export default async function HomePage() {
           home?.heroSubheading ||
           "Fresh eggs from our own layer farm — supplied in the volumes your business needs, with consistent quality and dependable daily logistics."
         }
-        ctaPrimary={{
-          label: home?.ctaPrimaryLabel || "Get a Quote",
-          href: home?.ctaPrimaryHref || "/wholesale-enquiry",
-        }}
-        ctaSecondary={{
-          label: home?.ctaSecondaryLabel || "View Our Eggs",
-          href: home?.ctaSecondaryHref || "/products",
-        }}
       />
       <TrustBar stats={stats} />
       <FarmFresh />
