@@ -4,7 +4,7 @@ import { useEffect } from "react";
 
 /**
  * Wires up scroll reveals site-wide: any element with the class `reveal`
- * (or `egg-wobble`) gets `is-visible` added when it scrolls into view, which
+ * gets `is-visible` added when it scrolls into view, which
  * the CSS animates. Mounted once in the frontend layout.
  *
  * - Honours prefers-reduced-motion: reveals everything immediately, no motion.
@@ -12,7 +12,7 @@ import { useEffect } from "react";
  */
 export function RevealInit() {
   useEffect(() => {
-    const SELECTOR = ".reveal:not(.is-visible), .egg-wobble:not(.is-visible)";
+    const SELECTOR = ".reveal:not(.is-visible)";
     const reveal = (el: Element) => el.classList.add("is-visible");
 
     const reduce =
@@ -20,7 +20,7 @@ export function RevealInit() {
       window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
     if (reduce || !("IntersectionObserver" in window)) {
-      document.querySelectorAll(".reveal, .egg-wobble").forEach(reveal);
+      document.querySelectorAll(".reveal").forEach(reveal);
       return;
     }
 

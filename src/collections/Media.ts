@@ -1,6 +1,6 @@
 import type { CollectionConfig } from 'payload'
 
-import { anyone, authenticated } from '../access'
+import { anyone, canEditContent } from '../access'
 
 /**
  * Uploaded media (farm photos, egg/tray imagery, blog covers, etc.).
@@ -12,9 +12,9 @@ export const Media: CollectionConfig = {
   slug: 'media',
   access: {
     read: anyone,
-    create: authenticated,
-    update: authenticated,
-    delete: authenticated,
+    create: canEditContent,
+    update: canEditContent,
+    delete: canEditContent,
   },
   fields: [
     {

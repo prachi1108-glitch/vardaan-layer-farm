@@ -1,6 +1,7 @@
 import type { GlobalConfig } from 'payload'
 
-import { anyone, authenticated } from '../access'
+import { anyone, isAdmin } from '../access'
+import { revalidateGlobal } from '../hooks/revalidateSite'
 
 /** Brand + contact details used site-wide (Doc 04 §4 Globals). */
 export const SiteSettings: GlobalConfig = {
@@ -8,7 +9,7 @@ export const SiteSettings: GlobalConfig = {
   label: 'Site Settings',
   access: {
     read: anyone,
-    update: authenticated,
+    update: isAdmin,
   },
   fields: [
     {
@@ -25,8 +26,8 @@ export const SiteSettings: GlobalConfig = {
         {
           type: 'row',
           fields: [
-            { name: 'phone', type: 'text', admin: { width: '50%', description: 'Display format, e.g. +91 90000 00000' } },
-            { name: 'phoneE164', type: 'text', admin: { width: '50%', description: 'Digits only for tel:/wa.me, e.g. 919000000000' } },
+            { name: 'phone', type: 'text', admin: { width: '50%', description: 'Display format, e.g. +91 80532 32718' } },
+            { name: 'phoneE164', type: 'text', admin: { width: '50%', description: 'Digits only for tel:/wa.me, e.g. 918053232718' } },
           ],
         },
         {
@@ -37,7 +38,13 @@ export const SiteSettings: GlobalConfig = {
           ],
         },
         { name: 'address', type: 'textarea' },
-        { name: 'businessHours', type: 'text' },
+        { name: 'businessHours', type: 'text', admin: { description: 'e.g. "Mon–Sat, 7 am – 7 pm"' } },
+        {
+          name: 'areasServed',
+          type: 'array',
+          admin: { description: 'Cities actually delivered to. Shown on Contact and in LocalBusiness schema.' },
+          fields: [{ name: 'name', type: 'text', required: true }],
+        },
         { name: 'mapEmbedUrl', type: 'text', admin: { description: 'Google Maps embed URL (leave blank to hide the map).' } },
       ],
     },
@@ -73,4 +80,5 @@ export const SiteSettings: GlobalConfig = {
       ],
     },
   ],
+  hooks: { afterChange: [revalidateGlobal] },
 }

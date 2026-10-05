@@ -1,85 +1,91 @@
 import Link from "next/link";
 import type { ComponentProps, ReactNode } from "react";
+import { Icon } from "@/components/icons";
 
-type Variant = "primary" | "secondary" | "outline" | "ghost" | "light";
-type Size = "md" | "lg";
+/**
+ * Buttons (Doc 03 §6): pill, 52px tall, uppercase Inter 600.
+ *  - primary:   Clay fill, white text, arrow; hover Clay Hover + 2px lift
+ *  - secondary: transparent, 1.5px Cocoa/20% border
+ *  - whatsapp:  white pill, Cocoa text, green glyph
+ */
+
+type Variant = "primary" | "secondary" | "whatsapp";
+type Size = "md" | "sm";
 
 const base =
-  "inline-flex items-center justify-center gap-2 rounded-lg font-label-md text-label-md transition-all duration-200 active:scale-95 focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-primary-container/50 disabled:opacity-60 disabled:pointer-events-none";
-
-const variants: Record<Variant, string> = {
-  /** Primary action (quote / enquire) — yellow with deep-brown text. */
-  primary:
-    "bg-primary-container text-on-surface font-bold hover:-translate-y-0.5 hover:shadow-aura shadow-ambient",
-  /** Secondary — filled earthy brown. */
-  secondary:
-    "bg-secondary text-surface-cream hover:bg-on-secondary-container hover:-translate-y-0.5 hover:shadow-warm-aura",
-  /** Tertiary — outlined earthy brown. */
-  outline:
-    "bg-transparent text-secondary border-[1.5px] border-secondary hover:bg-secondary hover:text-surface-cream hover:-translate-y-0.5 hover:shadow-warm-aura",
-  ghost: "bg-transparent text-secondary hover:bg-surface-container/60",
-  /** For use on dark bands. */
-  light:
-    "bg-surface-cream text-on-surface font-semibold hover:bg-pure-white hover:-translate-y-0.5",
-};
-
+  "inline-flex items-center justify-center gap-2 rounded-full font-semibold uppercase tracking-[0.06em] transition-all duration-200 whitespace-nowrap";
 const sizes: Record<Size, string> = {
-  md: "px-space-lg py-3",
-  lg: "px-space-xl py-3.5",
+  md: "h-[52px] px-7 text-[15px]",
+  sm: "h-11 px-5 text-[13px]",
+};
+const variants: Record<Variant, string> = {
+  primary: "bg-clay text-white hover:bg-clay-soft hover:-translate-y-0.5 shadow-[0_8px_18px_rgba(169,87,62,0.22)]",
+  secondary: "border-[1.5px] border-cocoa/20 text-cocoa hover:border-cocoa/50 hover:bg-white",
+  whatsapp: "bg-white text-cocoa border border-line hover:-translate-y-0.5 shadow-soft",
 };
 
-function classes(variant: Variant, size: Size, extra?: string) {
-  return [base, variants[variant], sizes[size], extra].filter(Boolean).join(" ");
+export function buttonClass(variant: Variant = "primary", size: Size = "md", extra = "") {
+  return `${base} ${sizes[size]} ${variants[variant]} ${extra}`;
 }
 
-type CommonProps = {
+function Inner({ variant, children, arrow }: { variant: Variant; children: ReactNode; arrow?: boolean }) {
+  return (
+    <>
+      {variant === "whatsapp" ? <Icon.WhatsApp className="h-5 w-5 text-whatsapp" /> : null}
+      {children}
+      {arrow ?? variant === "primary" ? <Icon.ArrowRight className="h-[18px] w-[18px]" /> : null}
+    </>
+  );
+}
+
+type LinkProps = Omit<ComponentProps<typeof Link>, "className"> & {
   variant?: Variant;
   size?: Size;
+  arrow?: boolean;
   className?: string;
-  children: ReactNode;
 };
 
-export function ButtonLink({
-  href,
+export function ButtonLink({ variant = "primary", size = "md", arrow, className = "", children, ...rest }: LinkProps) {
+  return (
+    <Link className={buttonClass(variant, size, className)} {...rest}>
+      <Inner variant={variant} arrow={arrow}>
+        {children}
+      </Inner>
+    </Link>
+  );
+}
+
+/** For external links (tel:, wa.me, mailto:) where next/link isn't appropriate. */
+export function ButtonA({
   variant = "primary",
   size = "md",
-  className,
+  arrow,
+  className = "",
   children,
   ...rest
-}: CommonProps & { href: string } & Omit<
-    ComponentProps<typeof Link>,
-    "href" | "className"
-  >) {
-  const external = /^https?:|^tel:|^mailto:/.test(href);
-  if (external) {
-    return (
-      <a
-        href={href}
-        className={classes(variant, size, className)}
-        target={href.startsWith("http") ? "_blank" : undefined}
-        rel={href.startsWith("http") ? "noopener noreferrer" : undefined}
-      >
-        {children}
-      </a>
-    );
-  }
+}: ComponentProps<"a"> & { variant?: Variant; size?: Size; arrow?: boolean }) {
   return (
-    <Link href={href} className={classes(variant, size, className)} {...rest}>
-      {children}
-    </Link>
+    <a className={buttonClass(variant, size, className)} {...rest}>
+      <Inner variant={variant} arrow={arrow}>
+        {children}
+      </Inner>
+    </a>
   );
 }
 
 export function Button({
   variant = "primary",
   size = "md",
-  className,
+  arrow,
+  className = "",
   children,
   ...rest
-}: CommonProps & ComponentProps<"button">) {
+}: ComponentProps<"button"> & { variant?: Variant; size?: Size; arrow?: boolean }) {
   return (
-    <button className={classes(variant, size, className)} {...rest}>
-      {children}
+    <button className={buttonClass(variant, size, `${className} disabled:opacity-60 disabled:hover:translate-y-0`)} {...rest}>
+      <Inner variant={variant} arrow={arrow}>
+        {children}
+      </Inner>
     </button>
   );
 }

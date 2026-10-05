@@ -1,6 +1,6 @@
 import type { CollectionConfig } from 'payload'
 
-import { authenticated } from '../access'
+import { authenticated, isAdmin, isAdminField } from '../access'
 
 /**
  * Admin users for the Payload CMS. This is the auth-enabled collection that
@@ -15,9 +15,15 @@ export const Users: CollectionConfig = {
   auth: true,
   access: {
     read: authenticated,
-    create: authenticated,
-    update: authenticated,
-    delete: authenticated,
+    create: isAdmin,
+    // Admins may update anyone; everyone else only their own account.
+    update: ({ req: { user } }) => {
+      if (!user) return false
+      const role = (user as { role?: string | null }).role
+      if (!role || role === 'admin') return true
+      return { id: { equals: user.id } }
+    },
+    delete: isAdmin,
   },
   fields: [
     {
@@ -31,9 +37,12 @@ export const Users: CollectionConfig = {
       options: [
         { label: 'Admin', value: 'admin' },
         { label: 'Editor', value: 'editor' },
+        { label: 'Sales', value: 'sales' },
       ],
+      access: { update: isAdminField },
       admin: {
-        description: 'Reserved for future permission tiers. All users can manage content for now.',
+        description:
+          'Admin: everything. Editor: pages, posts, media, FAQs, grades. Sales: enquiries only.',
       },
     },
   ],

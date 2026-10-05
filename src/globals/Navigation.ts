@@ -1,13 +1,17 @@
 import type { GlobalConfig } from 'payload'
 
-import { anyone, authenticated } from '../access'
+import { anyone, canEditContent } from '../access'
 
 /** Editable header/footer menus (Doc 04 §4 Globals, optional). */
 export const Navigation: GlobalConfig = {
   slug: 'navigation',
+  // Not used by the v2 site (copy lives in code until the pages/blocks model
+  // lands; menus are in src/lib/site.ts). Hidden, not removed, to avoid a
+  // destructive schema push.
+  admin: { hidden: true },
   access: {
     read: anyone,
-    update: authenticated,
+    update: canEditContent,
   },
   fields: [
     {

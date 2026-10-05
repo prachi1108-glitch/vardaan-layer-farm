@@ -1,6 +1,6 @@
 import type { CollectionConfig } from 'payload'
 
-import { anyone, authenticated } from '../access'
+import { anyone, canEditContent } from '../access'
 import { slugField } from '../fields/slug'
 
 /**
@@ -11,14 +11,17 @@ import { slugField } from '../fields/slug'
 export const Products: CollectionConfig = {
   slug: 'products',
   admin: {
+    // Superseded by the Grades collection (v2 docs). Hidden rather than
+    // removed so the dev schema push never has to drop its tables.
+    hidden: true,
     useAsTitle: 'title',
     defaultColumns: ['title', 'grade', 'order', 'isActive'],
   },
   access: {
     read: anyone,
-    create: authenticated,
-    update: authenticated,
-    delete: authenticated,
+    create: canEditContent,
+    update: canEditContent,
+    delete: canEditContent,
   },
   fields: [
     {

@@ -1,6 +1,7 @@
 import type { CollectionConfig } from 'payload'
 
-import { anyone, authenticated } from '../access'
+import { anyone, canEditContent } from '../access'
+import { revalidateHooks } from '../hooks/revalidateSite'
 
 /** Customer quotes for trust-building (Doc 04 §4, optional but valuable). */
 export const Testimonials: CollectionConfig = {
@@ -11,9 +12,9 @@ export const Testimonials: CollectionConfig = {
   },
   access: {
     read: anyone,
-    create: authenticated,
-    update: authenticated,
-    delete: authenticated,
+    create: canEditContent,
+    update: canEditContent,
+    delete: canEditContent,
   },
   fields: [
     {
@@ -44,4 +45,5 @@ export const Testimonials: CollectionConfig = {
       admin: { position: 'sidebar' },
     },
   ],
+  hooks: { ...revalidateHooks },
 }

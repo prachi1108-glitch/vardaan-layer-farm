@@ -13,6 +13,9 @@ import { Categories } from './collections/Categories'
 import { Posts } from './collections/Posts'
 import { Enquiries } from './collections/Enquiries'
 import { Testimonials } from './collections/Testimonials'
+import { Faqs } from './collections/Faqs'
+import { Grades } from './collections/Grades'
+import { Authors } from './collections/Authors'
 import { SiteSettings } from './globals/SiteSettings'
 import { HomePage } from './globals/HomePage'
 import { Navigation } from './globals/Navigation'
@@ -24,10 +27,10 @@ const dirname = path.dirname(filename)
 /**
  * Payload CMS configuration for Vardaan Layer Farm.
  *
- * Stack (Doc 04): Payload 3 embedded in Next.js, backed by Neon (Postgres)
- * via the Postgres adapter. Collections and globals are added phase by phase
- * (Phase 2). Phase 1 ships the auth (Users) and Media collections so the
- * admin at /admin works end to end against Neon.
+ * Stack (PRD §6): Payload 3 embedded in Next.js, backed by Neon (Postgres)
+ * via the Postgres adapter. Content model per PRD §7. Superseded v1 schema
+ * (Products, HomePage, Navigation) is hidden rather than removed so the dev
+ * schema push stays additive — drop it with a proper migration later.
  */
 export default buildConfig({
   admin: {
@@ -42,6 +45,9 @@ export default buildConfig({
     Products,
     Categories,
     Posts,
+    Authors,
+    Faqs,
+    Grades,
     Enquiries,
     Testimonials,
   ],

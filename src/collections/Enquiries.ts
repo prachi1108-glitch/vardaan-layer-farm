@@ -1,6 +1,6 @@
-import type { CollectionConfig } from 'payload'
+import type { CollectionConfig, Endpoint } from 'payload'
 
-import { anyone, authenticated } from '../access'
+import { anyone, canWorkLeads, isAdmin } from '../access'
 import { notifyNewEnquiry } from '../lib/notify'
 
 /**
@@ -10,21 +10,75 @@ import { notifyNewEnquiry } from '../lib/notify'
  * authenticated CMS users can read/update/delete. The `status` field turns
  * /admin into a lightweight CRM (New -> Contacted -> Quoted -> Won/Lost).
  *
- * Notifications (email/WhatsApp to Vardaan) are wired in Phase 3; the
- * afterChange hook below currently just logs new leads server-side.
+ * The afterChange hook sends the admin notification + buyer confirmation and
+ * records the outcome in `emailStatus` (PRD FR-2.8: a failed email never
+ * loses the lead, it just raises a flag in the list view).
  */
+const CSV_COLUMNS = [
+  'id', 'createdAt', 'status', 'businessName', 'name', 'businessType', 'phone', 'email', 'city',
+  'quantity', 'quantityUnit', 'frequency', 'requiredBy', 'preferredGrade', 'message', 'followUpAt',
+  'notes', 'emailStatus', 'sourcePage', 'landingPage', 'referrer', 'device',
+  'utm.source', 'utm.medium', 'utm.campaign',
+] as const
+
+const csvCell = (v: unknown) => {
+  const text = v === null || v === undefined ? '' : String(v)
+  // Quote every cell; neutralise spreadsheet formula injection.
+  const safe = /^[=+\-@]/.test(text) ? `'${text}` : text
+  return `"${safe.replace(/"/g, '""')}"`
+}
+
+/** GET /api/enquiries/export[?status=new] — CSV download for admin and sales (PRD FR-8.5). */
+const exportCsv: Endpoint = {
+  path: '/export',
+  method: 'get',
+  handler: async (req) => {
+    if (!req.user || !canWorkLeads({ req } as never)) {
+      return Response.json({ error: 'Not allowed' }, { status: 403 })
+    }
+    const status = new URL(req.url ?? '', 'http://x').searchParams.get('status')
+    const { docs } = await req.payload.find({
+      collection: 'enquiries',
+      where: status ? { status: { equals: status } } : undefined,
+      sort: '-createdAt',
+      limit: 10000,
+      depth: 0,
+      overrideAccess: false,
+      user: req.user,
+    })
+    const rows = docs.map((d) =>
+      CSV_COLUMNS.map((col) => {
+        const v = col.split('.').reduce<unknown>((o, k) => (o as Record<string, unknown> | undefined)?.[k], d)
+        return csvCell(v)
+      }).join(','),
+    )
+    // BOM so Excel opens the UTF-8 file correctly.
+    const csv = '\uFEFF' + [CSV_COLUMNS.join(','), ...rows].join('\r\n')
+    const date = new Date().toISOString().slice(0, 10)
+    return new Response(csv, {
+      headers: {
+        'Content-Type': 'text/csv; charset=utf-8',
+        'Content-Disposition': `attachment; filename="vardaan-enquiries-${date}.csv"`,
+      },
+    })
+  },
+}
+
 export const Enquiries: CollectionConfig = {
   slug: 'enquiries',
   admin: {
     useAsTitle: 'businessName',
-    defaultColumns: ['businessName', 'name', 'businessType', 'city', 'status', 'createdAt'],
+    defaultColumns: ['businessName', 'name', 'businessType', 'city', 'status', 'emailStatus', 'createdAt'],
     group: 'Leads',
+    description:
+      'Download all enquiries as CSV at /api/enquiries/export (add ?status=new to filter by status).',
   },
+  endpoints: [exportCsv],
   access: {
     create: anyone,
-    read: authenticated,
-    update: authenticated,
-    delete: authenticated,
+    read: canWorkLeads,
+    update: canWorkLeads,
+    delete: isAdmin,
   },
   fields: [
     // ---- Required (Doc 02 form fields) ----
@@ -72,8 +126,18 @@ export const Enquiries: CollectionConfig = {
         { label: 'Ongoing', value: 'ongoing' },
       ],
     },
-    { name: 'preferredGrade', type: 'text' },
+    {
+      name: 'requiredBy',
+      type: 'date',
+      admin: { description: 'For one-time orders.', date: { pickerAppearance: 'dayOnly' } },
+    },
+    { name: 'preferredGrade', type: 'text', admin: { description: 'Medium / Large / Extra Large / Mixed' } },
     { name: 'message', type: 'textarea' },
+    {
+      name: 'consent',
+      type: 'checkbox',
+      admin: { readOnly: true, description: 'Buyer agreed to be contacted about this enquiry (DPDP Act).' },
+    },
 
     // ---- Pipeline status (CRM) ----
     {
@@ -89,6 +153,30 @@ export const Enquiries: CollectionConfig = {
       ],
       admin: { position: 'sidebar' },
     },
+    {
+      name: 'assignedTo',
+      type: 'relationship',
+      relationTo: 'users',
+      admin: { position: 'sidebar' },
+    },
+    {
+      name: 'followUpAt',
+      type: 'date',
+      admin: { position: 'sidebar', date: { pickerAppearance: 'dayAndTime' } },
+    },
+    { name: 'notes', type: 'textarea', admin: { description: 'Internal notes — never shown to the buyer.' } },
+    {
+      name: 'emailStatus',
+      type: 'select',
+      defaultValue: 'pending',
+      options: [
+        { label: 'Pending', value: 'pending' },
+        { label: 'Sent', value: 'sent' },
+        { label: 'Not configured', value: 'not_configured' },
+        { label: 'Failed', value: 'failed' },
+      ],
+      admin: { position: 'sidebar', readOnly: true, description: 'Admin notification email.' },
+    },
 
     // ---- Behind the scenes (attribution) ----
     {
@@ -96,6 +184,9 @@ export const Enquiries: CollectionConfig = {
       type: 'text',
       admin: { position: 'sidebar', readOnly: true },
     },
+    { name: 'landingPage', type: 'text', admin: { position: 'sidebar', readOnly: true } },
+    { name: 'referrer', type: 'text', admin: { position: 'sidebar', readOnly: true } },
+    { name: 'device', type: 'text', admin: { position: 'sidebar', readOnly: true } },
     {
       name: 'utm',
       type: 'group',
@@ -111,11 +202,17 @@ export const Enquiries: CollectionConfig = {
   ],
   hooks: {
     afterChange: [
-      ({ doc, operation }) => {
+      ({ doc, operation, req }) => {
         if (operation === 'create') {
-          // Fire-and-forget: notify Vardaan (email if configured, else logs).
-          // Never awaited — a slow/failed notification must not block the save.
-          void notifyNewEnquiry(doc)
+          // Fire-and-forget so a slow email never blocks the save; the result
+          // is written back to emailStatus once known.
+          void notifyNewEnquiry(doc).then((emailStatus) =>
+            req.payload
+              .update({ collection: 'enquiries', id: doc.id, data: { emailStatus } })
+              .catch((err) =>
+                req.payload.logger.error({ err }, '[enquiry] could not record emailStatus'),
+              ),
+          )
         }
         return doc
       },

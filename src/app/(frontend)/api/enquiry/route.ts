@@ -1,34 +1,45 @@
-import config from "@payload-config";
-import { getPayload } from "payload";
 import { NextResponse } from "next/server";
+import { compactEnquirySchema, enquirySchema, type EnquiryInput } from "@/lib/enquiry-schema";
+import { getPayloadClient } from "@/lib/payload";
 
 /**
- * Wholesale enquiry intake.
- *
- * Validates the payload, applies a honeypot + light rate-limit for spam, then
- * saves the lead to the Enquiries collection in Neon via Payload's Local API.
- * The collection's afterChange hook fires the notification (see Enquiries.ts).
+ * Enquiry intake (PRD FR-2). Validates with the same Zod schema as the form,
+ * applies honeypot + Turnstile (when configured) + a 5/hour IP rate limit,
+ * then saves to the Enquiries collection. The collection hook sends emails.
  */
 
 type Body = Record<string, unknown>;
 
-const str = (v: unknown) => (typeof v === "string" ? v.trim() : "");
-
-// Best-effort in-memory rate limit (per server instance).
-const HITS = new Map<string, { count: number; ts: number }>();
-const WINDOW_MS = 60_000;
+// Best-effort in-memory limiter (per server instance) — 5 per IP per hour.
+const HITS = new Map<string, number[]>();
+const WINDOW_MS = 60 * 60 * 1000;
 const MAX_PER_WINDOW = 5;
 
 function rateLimited(ip: string): boolean {
   const now = Date.now();
-  const entry = HITS.get(ip);
-  if (!entry || now - entry.ts > WINDOW_MS) {
-    HITS.set(ip, { count: 1, ts: now });
+  const recent = (HITS.get(ip) ?? []).filter((t) => now - t < WINDOW_MS);
+  recent.push(now);
+  HITS.set(ip, recent);
+  return recent.length > MAX_PER_WINDOW;
+}
+
+async function turnstileOk(token: unknown, ip: string): Promise<boolean> {
+  const secret = process.env.TURNSTILE_SECRET;
+  if (!secret) return true; // not configured — honeypot + rate limit only
+  if (typeof token !== "string" || !token) return false;
+  try {
+    const res = await fetch("https://challenges.cloudflare.com/turnstile/v0/siteverify", {
+      method: "POST",
+      body: new URLSearchParams({ secret, response: token, remoteip: ip }),
+    });
+    const json = (await res.json()) as { success?: boolean };
+    return Boolean(json.success);
+  } catch {
     return false;
   }
-  entry.count += 1;
-  return entry.count > MAX_PER_WINDOW;
 }
+
+const str = (v: unknown, max = 500) => (typeof v === "string" ? v.trim().slice(0, max) : undefined) || undefined;
 
 export async function POST(req: Request) {
   let body: Body;
@@ -38,77 +49,72 @@ export async function POST(req: Request) {
     return NextResponse.json({ ok: false, error: "Invalid request." }, { status: 400 });
   }
 
-  // Honeypot: real users never fill this. Pretend success to not tip off bots.
-  if (str(body.company_website)) {
-    return NextResponse.json({ ok: true });
-  }
+  // Honeypot: real users never fill this. Pretend success so bots learn nothing.
+  if (str(body.company_website)) return NextResponse.json({ ok: true });
 
-  const ip =
-    req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ||
-    req.headers.get("x-real-ip") ||
-    "unknown";
+  const ip = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || req.headers.get("x-real-ip") || "unknown";
   if (rateLimited(ip)) {
     return NextResponse.json(
-      { ok: false, error: "Too many enquiries. Please try again in a minute." },
-      { status: 429 }
+      { ok: false, error: "We've received several enquiries from you already. Please call or WhatsApp us instead." },
+      { status: 429 },
     );
   }
-
-  const name = str(body.name);
-  const businessName = str(body.businessName);
-  const businessType = str(body.businessType);
-  const phone = str(body.phone);
-  const city = str(body.city);
-  const quantityRaw = str(body.quantity) || String(body.quantity ?? "");
-  const quantity = Number.parseInt(quantityRaw, 10);
-
-  if (!name || !businessName || !businessType || !phone || !city) {
-    return NextResponse.json(
-      { ok: false, error: "Please fill in all required fields." },
-      { status: 422 }
-    );
-  }
-  if (name.length > 200 || str(body.message).length > 5000) {
-    return NextResponse.json({ ok: false, error: "Invalid input." }, { status: 422 });
+  if (!(await turnstileOk(body.turnstileToken, ip))) {
+    return NextResponse.json({ ok: false, error: "Please confirm you're not a robot and try again." }, { status: 400 });
   }
 
-  const utm = (body.utm && typeof body.utm === "object" ? body.utm : {}) as Record<
-    string,
-    unknown
-  >;
+  const compact = body.variant === "compact";
+  const parsed = compact ? compactEnquirySchema.safeParse(body) : enquirySchema.safeParse(body);
+  if (!parsed.success) {
+    const fieldErrors: Record<string, string> = {};
+    for (const issue of parsed.error.issues) {
+      const key = String(issue.path[0] ?? "form");
+      fieldErrors[key] ??= issue.message;
+    }
+    return NextResponse.json({ ok: false, error: "Please check the highlighted fields.", fieldErrors }, { status: 422 });
+  }
+
+  const d = parsed.data as Partial<EnquiryInput>;
+  const utm = (body.utm && typeof body.utm === "object" ? body.utm : {}) as Record<string, unknown>;
 
   try {
-    const payload = await getPayload({ config });
-    await payload.create({
+    const payload = await getPayloadClient();
+    const doc = await payload.create({
       collection: "enquiries",
       data: {
-        name,
-        businessName,
-        businessType: businessType as never,
-        phone,
-        city,
-        quantity: Number.isFinite(quantity) ? quantity : undefined,
-        quantityUnit: (str(body.quantityUnit) || undefined) as never,
-        email: str(body.email) || undefined,
-        frequency: (str(body.frequency) || undefined) as never,
-        preferredGrade: str(body.preferredGrade) || undefined,
-        message: str(body.message) || undefined,
-        sourcePage: str(body.sourcePage) || undefined,
+        // The quick form on Our Eggs doesn't ask for names; sales fills them in on the call.
+        name: d.name ?? "Not given (quick form)",
+        businessName: d.businessName ?? "Not given (quick form)",
+        businessType: d.businessType as never,
+        phone: d.phone!,
+        city: d.city,
+        quantity: d.quantity,
+        quantityUnit: d.quantityUnit as never,
+        email: d.email,
+        frequency: d.frequency as never,
+        requiredBy: d.requiredBy,
+        preferredGrade: d.preferredGrade,
+        message: d.message,
+        consent: d.consent,
+        sourcePage: str(body.sourcePage),
+        landingPage: str(body.landingPage),
+        referrer: str(body.referrer),
+        device: str(body.device, 40),
         utm: {
-          source: str(utm.source) || undefined,
-          medium: str(utm.medium) || undefined,
-          campaign: str(utm.campaign) || undefined,
-          term: str(utm.term) || undefined,
-          content: str(utm.content) || undefined,
+          source: str(utm.source),
+          medium: str(utm.medium),
+          campaign: str(utm.campaign),
+          term: str(utm.term),
+          content: str(utm.content),
         },
       },
     });
-    return NextResponse.json({ ok: true });
+    return NextResponse.json({ ok: true, id: doc.id });
   } catch (err) {
     console.error("[enquiry] failed to save:", err);
     return NextResponse.json(
-      { ok: false, error: "We couldn't save your enquiry. Please try again." },
-      { status: 500 }
+      { ok: false, error: "We couldn't save your enquiry. Please call or WhatsApp us — we're sorry about that." },
+      { status: 500 },
     );
   }
 }

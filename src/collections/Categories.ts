@@ -1,7 +1,8 @@
 import type { CollectionConfig } from 'payload'
 
-import { anyone, authenticated } from '../access'
+import { anyone, canEditContent } from '../access'
 import { slugField } from '../fields/slug'
+import { revalidateHooks } from '../hooks/revalidateSite'
 
 /** Blog taxonomy (Doc 04 §4). */
 export const Categories: CollectionConfig = {
@@ -12,9 +13,9 @@ export const Categories: CollectionConfig = {
   },
   access: {
     read: anyone,
-    create: authenticated,
-    update: authenticated,
-    delete: authenticated,
+    create: canEditContent,
+    update: canEditContent,
+    delete: canEditContent,
   },
   fields: [
     {
@@ -28,4 +29,5 @@ export const Categories: CollectionConfig = {
       type: 'textarea',
     },
   ],
+  hooks: { ...revalidateHooks },
 }

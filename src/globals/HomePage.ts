@@ -1,14 +1,18 @@
 import type { GlobalConfig } from 'payload'
 
-import { anyone, authenticated } from '../access'
+import { anyone, canEditContent } from '../access'
 
 /** Editable homepage content (Doc 04 §3.1 & §4 Globals). */
 export const HomePage: GlobalConfig = {
   slug: 'home-page',
+  // Not used by the v2 site (copy lives in code until the pages/blocks model
+  // lands; menus are in src/lib/site.ts). Hidden, not removed, to avoid a
+  // destructive schema push.
+  admin: { hidden: true },
   label: 'Home Page',
   access: {
     read: anyone,
-    update: authenticated,
+    update: canEditContent,
   },
   fields: [
     {
