@@ -24,6 +24,9 @@ import { createReliableStream } from './lib/db-stream'
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
 
+/** True on Vercel (or any host that sets it) — see the `stream` note below. */
+const isHosted = Boolean(process.env.VERCEL)
+
 /**
  * Payload CMS configuration for Vardaan Layer Farm.
  *
@@ -61,8 +64,10 @@ export default buildConfig({
     pool: {
       connectionString: process.env.DATABASE_URI || '',
       // Resolve Neon's hostname via public DNS to sidestep flaky router DNS.
-      // See src/lib/db-stream.ts for the full rationale.
-      stream: createReliableStream,
+      // See src/lib/db-stream.ts for the full rationale. This is a workaround
+      // for one local network only: hosted runtimes resolve Neon fine, and
+      // forcing their DNS through 1.1.1.1 would be a liability, not a fix.
+      stream: isHosted ? undefined : createReliableStream,
     },
   }),
   sharp,
